@@ -1,32 +1,13 @@
-"""
-Go/no-go proof for the causal-splice intervention mechanism (paper Section
-"Simulator-Grounded Causal Sensitivity", "Validation" paragraph).
+"""Validate that a re-tokenized frame splice affects subsequent iVideoGPT
+predictions while identical-prefix continuations remain deterministic.
 
-Question: can iVideoGPT generate through a complete predicted frame t, have
-that frame replaced with a modified, re-tokenized version, have the causal
-token prefix reconstructed, and have a FRESH continuation generation call
-from that prefix produce future frames that genuinely differ from the
-unmodified continuation?
-
-Procedure, using the real pretrained checkpoint:
-  1. Generate normally through frame t (greedy decoding) -> prefix_tokens.
-  2. Branch A: continue generation unmodified from prefix_tokens, frames t+1..t+k.
-  3. Branch B: decode frame t, apply a large, deliberately strong pixel
-     modification (paint a bright solid-color block over most of the frame),
-     re-tokenize it, splice it into a NEW prefix tensor (prefix_tokens is not
-     mutated), then continue generation from that reconstructed prefix,
-     frames t+1..t+k.
-  4. Both continuations use continue_from_prefix-style reconstruction: fresh
-     embeddings are rebuilt purely from (tokens, actions) with no persisted
-     KV-cache or Python object crossing the splice boundary (see
-     src/causal_splice.py docstring for why the architecture allows this).
-  5. Compare A vs B token-for-token and pixel-for-pixel for frames t+1..t+k.
-     A difference is a positive result: later frames causally depend on
-     frame t's content.
-
-All greedy (do_sample=False) so both branches are deterministic apart from
-the intervention itself. Requires the same real demonstration clip as
-validate_checkpoint_loading.py.
+Generates through frame t, then branches: A continues unmodified; B splices
+in a strongly modified, re-tokenized version of frame t (a fresh prefix
+tensor, not mutating A's) and continues from there. Both continuations
+rebuild embeddings from scratch (tokens, actions only, no persisted
+KV-cache; see src/causal_splice.py). A determinism control repeats A's
+continuation independently. All greedy decoding. Requires the same real
+demonstration clip as validate_checkpoint_loading.py.
 """
 import os
 import sys
@@ -79,8 +60,7 @@ def main():
     print(f"gen_input shape: {gen_input.shape}")
     print(f"prelude_tokens_num={model.prelude_tokens_num}, tokens_num_per_dyna={model.tokens_num_per_dyna}")
 
-    # --- Step 1: normal generation through frame STOP_FRAME ---
-    print(f"\n[1] Generating normally through frame {STOP_FRAME} (0-indexed future frame)...")
+    print(f"\nGenerating normally through frame {STOP_FRAME}...")
     prefix_tokens, prefix_embeds = sl.generate_frames(
         model, gen_input.clone(), action_t, start_frame=0, end_frame_exclusive=STOP_FRAME + 1,
         do_sample=False,
@@ -89,8 +69,7 @@ def main():
     assert prefix_tokens.shape[1] == expected_len
     print(f"    prefix_tokens shape: {prefix_tokens.shape} (expected {expected_len})")
 
-    # --- Step 2: splice frame STOP_FRAME with a strong modification ---
-    print(f"\n[2] Decoding frame {STOP_FRAME}, applying strong modification, re-tokenizing...")
+    print(f"\nDecoding frame {STOP_FRAME}, applying strong modification, re-tokenizing...")
     spliced_tokens, orig_pixels, modified_pixels = sl.splice_frame(
         model, tokenizer, prefix_tokens, context_pixel_values, STOP_FRAME, strong_modification
     )
@@ -99,30 +78,27 @@ def main():
     new_dyna = spliced_tokens[:, start:end]
     n_changed = (orig_dyna != new_dyna).sum().item()
     print(f"    dyna tokens changed at frame {STOP_FRAME}: {n_changed}/{orig_dyna.numel()}")
-    assert not torch.equal(orig_dyna, new_dyna), "re-tokenized frame produced IDENTICAL tokens -- modification too weak or splice wrong"
-    # sanity: everything before the spliced frame must be untouched
+    assert not torch.equal(orig_dyna, new_dyna), "re-tokenized frame produced identical tokens: modification too weak or splice wrong"
+    # Everything before the spliced frame must be untouched.
     assert torch.equal(prefix_tokens[:, :start], spliced_tokens[:, :start]), "splice corrupted earlier tokens"
     assert prefix_tokens.shape == spliced_tokens.shape
 
-    # --- Step 3: FRESH continuation from each prefix (A = unmodified, B = spliced) ---
     end_frame = STOP_FRAME + 1 + CONTINUE_FRAMES
-    print(f"\n[3] Fresh continuation A (unmodified prefix), frames {STOP_FRAME + 1}..{end_frame - 1}...")
+    print(f"\nFresh continuation A (unmodified prefix), frames {STOP_FRAME + 1}..{end_frame - 1}...")
     tokens_A, _ = sl.generate_frames(
         model, prefix_tokens.clone(), action_t, start_frame=STOP_FRAME + 1, end_frame_exclusive=end_frame,
         do_sample=False, inputs_embeds=None,
     )
-    print(f"\n[3] Fresh continuation B (spliced prefix), frames {STOP_FRAME + 1}..{end_frame - 1}...")
+    print(f"\nFresh continuation B (spliced prefix), frames {STOP_FRAME + 1}..{end_frame - 1}...")
     tokens_B, _ = sl.generate_frames(
         model, spliced_tokens.clone(), action_t, start_frame=STOP_FRAME + 1, end_frame_exclusive=end_frame,
         do_sample=False, inputs_embeds=None,
     )
 
-    # --- Step 3b (CONTROL): repeat continuation A from the SAME unmodified prefix
-    # a second time, independently reconstructed. If greedy decoding + the fresh
-    # embedding reconstruction were nondeterministic on this backend (e.g. MPS
-    # float reduction order), this control would show spurious differences and
-    # the A-vs-B result above would be uninterpretable. ---
-    print(f"\n[3b] CONTROL: repeat continuation A from the identical unmodified prefix...")
+    # Determinism check: repeat A's continuation independently. If greedy
+    # decoding weren't deterministic on this backend, this would show
+    # spurious differences and the A-vs-B result would be uninterpretable.
+    print(f"\nDeterminism check: repeat continuation A from the identical unmodified prefix...")
     tokens_A_repeat, _ = sl.generate_frames(
         model, prefix_tokens.clone(), action_t, start_frame=STOP_FRAME + 1, end_frame_exclusive=end_frame,
         do_sample=False, inputs_embeds=None,
@@ -131,12 +107,11 @@ def main():
     print(f"    control (A == A_repeat): {control_identical}")
     if not control_identical:
         n_diff = (tokens_A != tokens_A_repeat).sum().item()
-        print(f"    WARNING: {n_diff} tokens differ between two runs of the SAME unmodified "
-              f"prefix -- generation is not deterministic on this backend/setup. The A-vs-B "
+        print(f"    warning: {n_diff} tokens differ between two runs of the same unmodified "
+              f"prefix; generation is not deterministic on this backend/setup, so the A-vs-B "
               f"result below cannot be attributed to the splice alone.")
 
-    # --- Step 4: compare ---
-    print("\n[4] Comparing continuations A vs B token-for-token, frame by frame:")
+    print("\nComparing continuations A vs B token-for-token, frame by frame:")
     any_diff = False
     for i in range(STOP_FRAME + 1, end_frame):
         s, e = sl.dyna_slice(model, i)
@@ -153,9 +128,7 @@ def main():
         recon_B = tokenizer.detokenize(tokens_B[:, :-1], CONTEXT_LENGTH).clamp(0, 1)
     pixel_diffs = []
     for i in range(STOP_FRAME + 1, end_frame):
-        # recon_* frame axis is [context frames][future frames], so future
-        # frame index i (0-indexed, matching sl.dyna_slice's convention) sits
-        # at absolute index CONTEXT_LENGTH + i.
+        # Future frame i is at CONTEXT_LENGTH + i in the reconstruction.
         d = (recon_A[:, CONTEXT_LENGTH + i] - recon_B[:, CONTEXT_LENGTH + i]).abs().mean().item()
         pixel_diffs.append(d)
         print(f"    frame {i}: mean abs pixel diff A vs B = {d:.5f}")
@@ -170,18 +143,14 @@ def main():
 
     print()
     if not control_identical:
-        print("RESULT: INCONCLUSIVE -- the determinism control failed (see WARNING above), so the "
-              "A-vs-B divergence cannot be attributed to the splice with confidence. STOP and diagnose "
-              "backend nondeterminism before proceeding.")
+        print("Result: inconclusive. The determinism control failed, so the A-vs-B "
+              "divergence cannot be attributed to the splice with confidence.")
     elif any_diff and max(pixel_diffs) > 1e-4:
-        print("RESULT: PASS -- (1) two continuations from an IDENTICAL unmodified "
-              "prefix are bit-identical (deterministic control passed), and (2) splicing a modified, "
-              "re-tokenized frame t into the causal prefix and starting a fresh continuation call from "
-              "there causes later generated frames to differ from the unmodified continuation.")
+        print("Result: pass. Repeated continuations from an identical unmodified prefix are "
+              "bit-identical, and splicing a modified, re-tokenized frame into the causal prefix "
+              "causes later generated frames to differ from the unmodified continuation.")
     else:
-        print("RESULT: FAILURE -- later frames did NOT change after the splice. "
-              "The architecture may not support this intervention as implemented, or the "
-              "modification/splice did not actually alter model input. STOP and diagnose.")
+        print("Result: fail. Later frames did not change after the splice.")
 
 
 if __name__ == "__main__":

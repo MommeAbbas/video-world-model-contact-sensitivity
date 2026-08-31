@@ -4,10 +4,9 @@ Section "Contact-Conditioned Rollout Dynamics"): mean +/- SEM curves, error
 increment (delta e_t), and a segmented slope-before/after summary
 (relative time < 0 vs. >= 0) for onset/release/control.
 
-This computes only descriptive statistics and plots -- the bootstrap
-comparison against control reported in the paper is a separate script,
-bootstrap_natural_rollout_effect.py, since it requires the per-event (not
-pooled-mean) slope values.
+Descriptive statistics and plots only; the reported bootstrap comparison
+against control is in bootstrap_natural_rollout_effect.py, which needs the
+per-event (not pooled-mean) slope values.
 """
 import json
 import os

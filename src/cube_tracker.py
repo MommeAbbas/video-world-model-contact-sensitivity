@@ -1,16 +1,11 @@
 """
 Deterministic, non-learned cube tracker for the physical-interpretability
-audit of the already-frozen event-centered experiment. Color-segmentation +
-connected-components only -- no learned detector, nothing trained.
+analysis: color segmentation plus connected components, no trained model.
 
-Cube (object index 0) is rgba=[0.8,0.1,0.1,1] (red); the other three objects
-are blue [0.1,0.1,0.8], green [0.1,0.8,0.1], yellow [0.8,0.8,0.1]
+Cube is rgba=[0.8,0.1,0.1,1] (red); other objects are blue/green/yellow
 (push_center_multi_lite.py). "Red minus max(green,blue)" isolates red from
-blue/green (low red) and from yellow (high green) without needing a learned
-model.
-
-MUST be validated (validation/validate_cube_tracker.py) against simulator-projected
-ground truth before being trusted on any generated/decoded frame.
+both without a learned model. Must be validated
+(validation/validate_cube_tracker.py) before use on generated/decoded frames.
 """
 import numpy as np
 from scipy import ndimage

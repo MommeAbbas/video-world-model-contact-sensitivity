@@ -1,33 +1,46 @@
 # Predictive Sensitivity Across Contact Transitions in a Video World Model
 
-Code accompanying the paper *"Predictive Sensitivity Across Contact Transitions
-in a Video World Model."* We study whether a video world model's local
-predictive sensitivity — how much its prediction changes under a small,
-calibrated perturbation to the state it starts from — is structured around
-physical contact transitions, using a simulator-grounded causal-splice
-intervention on [iVideoGPT](https://github.com/thuml/iVideoGPT) on a
-RoboSuite pushing task. We find that natural rollout error and causal
-sensitivity move independently around contact release, that a matched causal
-test replicates a release-approach sensitivity effect while the analogous
-onset effect fails independent replication, and that local sensitivity forms
-a smooth, opposing temporal profile that rises through onset and falls
-through release.
+We ask whether an action-conditioned video world model's *local predictive
+sensitivity* — how much its predicted continuation changes under a small,
+controlled physical perturbation to the state it starts from — is
+structured around robot-object contact transitions, rather than uniform
+across a manipulation episode.
 
-## What is ours vs. upstream
+We test this with a simulator-grounded causal-splice intervention on
+[iVideoGPT](https://github.com/thuml/iVideoGPT), applied to a RoboSuite
+pushing task:
+
+1. restore the exact simulator state at a chosen timestep;
+2. apply a small, calibrated displacement to the manipulated object;
+3. render and tokenize the resulting counterfactual frame;
+4. splice it into an otherwise identical autoregressive token prefix;
+5. hold all future actions fixed;
+6. compare the two resulting model continuations.
+
+Because both continuations come from the same model and differ only in the
+spliced frame, the comparison isolates the model's local sensitivity to that
+one perturbation — it does not establish a broader causal model of the
+scene.
+
+**Main finding.** Local predictive sensitivity shows opposing temporal
+structure around contact onset and release: it rises through onset and
+falls through release. A matched causal test at a fixed pre-transition
+offset finds a release-approach sensitivity effect that independently
+replicates on held-out episodes, while the analogous onset effect does not.
+Natural rollout-error behavior alone does not reveal this structure — it
+takes the causal intervention to see it.
+
+## Repository contents vs. upstream
 
 | | |
 |---|---|
-| **Our code** | Everything in `src/`, `experiments/`, `analysis/`, `figures/`, `validation/` in this repository. |
-| **Upstream iVideoGPT** | `third_party/iVideoGPT`, a pinned git submodule of [thuml/iVideoGPT](https://github.com/thuml/iVideoGPT), **used unmodified**. We do not claim authorship of any code under `third_party/`. |
+| **This work** | `src/`, `experiments/`, `analysis/`, `figures/`, `validation/` — the RoboSuite environment reconstruction, the causal-splice intervention/evaluation pipeline, and all experiment and analysis code. |
+| **Upstream iVideoGPT** | `third_party/iVideoGPT`, a pinned git submodule of [thuml/iVideoGPT](https://github.com/thuml/iVideoGPT), used unmodified. We do not claim authorship of any code under `third_party/`. |
 | **Model checkpoint** | `thuml/ivideogpt-vp2-robosuite-64-act-cond`, a pretrained checkpoint published by the iVideoGPT authors. Not included in this repository — see Checkpoint acquisition below. |
 
 We call into exactly two upstream modules at runtime
 (`ivideogpt.vq_model.CompressiveVQModel`, `ivideogpt.transformer.HeadModelWithAction`),
-via `src/model_loading.py`. Everything else in this repository is new: the
-RoboSuite environment reconstruction, the causal-splice intervention
-mechanism (a reimplementation of iVideoGPT's own frame-generation loop that
-never modifies iVideoGPT's source), and the full experiment/analysis/figure
-pipeline.
+via `src/model_loading.py`.
 
 ## Repository structure
 
@@ -45,7 +58,7 @@ validation/     Standalone reproducibility/sanity checks (not part of the
                 statistical pipeline).
 reference_outputs/  Small, final result files and figures, checked in so a
                 reader can inspect what the pipeline produces without
-                rerunning it. See "Included reference outputs" below.
+                rerunning it. See "Reference outputs" below.
 third_party/iVideoGPT/  Pinned upstream submodule (see above).
 outputs/        Generated at runtime by the scripts above (gitignored).
 checkpoints/    Where the downloaded model checkpoint is expected (gitignored).
@@ -54,8 +67,8 @@ checkpoints/    Where the downloaded model checkpoint is expected (gitignored).
 ## Installation
 
 ```bash
-git clone --recurse-submodules <this-repo-url>
-cd predictive-sensitivity-contact-transitions
+git clone --recurse-submodules <repository-url>
+cd video-world-model-contact-sensitivity
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 ```
@@ -69,9 +82,8 @@ git submodule update --init --recursive
 
 `third_party/iVideoGPT` is a git submodule pointing at
 `https://github.com/thuml/iVideoGPT.git`, pinned to commit
-`d601d5cac9e96c6aa0c17cb37ed6a7c7ca1fb210` (the commit this project's
-reconstruction and checkpoint usage were built against). It is used
-unmodified; `src/model_loading.py` adds it to `sys.path` at import time.
+`d601d5cac9e96c6aa0c17cb37ed6a7c7ca1fb210`. It is used unmodified;
+`src/model_loading.py` adds it to `sys.path` at import time.
 
 ## Checkpoint acquisition
 
@@ -88,107 +100,120 @@ checkpoints/ivideogpt-vp2-robosuite-64-act-cond/
 `checkpoints/` is gitignored; this path is expected relative to the
 repository root regardless of where you clone it.
 
-## Environment / data generation
+## Reproducing the experiments
 
 The environment is `PushCenterMultiLite` (`src/push_center_multi_lite.py`), a
-from-source RoboSuite/MuJoCo reconstruction of the VP2 benchmark's
-`PushCenterMulti` pushing task (geometry, camera, and object placement ported
-verbatim from the pinned original task source; native flat-shaded rendering
-is used in place of the original iGibson PBR renderer — see Limitations in
-the paper for the resulting appearance-domain-shift caveat). Episodes are
-generated by a scripted approach-push-retract policy
-(`src/episode_generation.py::run_episode`) against the cube, logging the full
-simulator state, actions, object poses/velocities, and gripper-object contact
-at every timestep.
+from-source RoboSuite/MuJoCo reconstruction of the pushing task the
+checkpoint was trained on. Episodes are generated by a scripted
+approach-push-retract policy (`src/episode_generation.py::run_episode`)
+against the manipulated object, logging the full simulator state, actions,
+object poses/velocities, and gripper-object contact at every timestep. Two
+episode batches are used throughout: an **exploratory batch (seeds 0–9)**,
+analyzed first, and a **held-out confirmation batch (seeds 100–109)**,
+generated and analyzed only afterward, for independent replication.
 
-Two episode batches are used throughout:
-- **Exploratory: seeds 0–9** (10 episodes) — all exploratory analysis was run
-  on this batch first.
-- **Held-out confirmation: seeds 100–109** (10 episodes) — generated and
-  analyzed only after the exploratory analysis was complete, for independent
-  replication.
+Run everything below from the repository root with the checkpoint in place.
+Each script's own docstring documents its exact inputs/outputs.
 
-## Reproduction pipeline (execution order)
+**1. Generate experiment data.** The confirmation batch is generated
+automatically by the onset-confirmation script in step 5. Generate the
+exploratory batch (`outputs/pilot_episodes.pkl`) with:
+```bash
+python experiments/run_exploratory_episode_generation.py
+```
+Note: episode generation is not bit-exactly deterministic from the seed
+alone (the underlying environment draws some randomness outside
+`run_episode`'s seed argument), so a freshly generated batch will not
+exactly reproduce the specific episodes behind the paper's reported
+numbers, even though it follows the identical procedure.
 
-Run everything from the repository root with the checkpoint in place. Each
-step's inputs/outputs are also documented in its module docstring.
-
-**1. Perturbation calibration** (paper Section "Simulator-Grounded Causal
-Sensitivity" — motivates the epsilon-search band used everywhere below):
+**2. Calibrate perturbations** — sweeps physical displacement magnitude
+against injected token change to characterize the direction/depth
+dependence of the perturbation instrument:
 ```bash
 python experiments/run_perturbation_calibration.py
 ```
 
-**2. Natural rollout-error experiment** (Section "Contact-Conditioned Rollout
-Dynamics"):
+**3. Natural rollout-error analysis** — natural (non-interventional) rollout
+error aligned to contact onset/release vs. free-motion controls, followed by
+a confound-adjusted analysis controlling for pre-event slope and post-event
+object velocity/action magnitude:
 ```bash
-python experiments/run_natural_rollout_error.py      # generates the exploratory episodes, collects rollouts
-python analysis/analyze_natural_rollout_error.py     # descriptive summary + plots
-python analysis/bootstrap_natural_rollout_effect.py  # first reported bootstrap (event-wise)
-python analysis/analyze_confound_adjusted_rollout.py # ceiling + motion/action confound regression ("Model 4")
-python analysis/bootstrap_confound_adjusted_effect.py # episode-cluster bootstrap for Model 4
+python experiments/run_natural_rollout_error.py
+python analysis/analyze_natural_rollout_error.py
+python analysis/bootstrap_natural_rollout_effect.py       # event-wise bootstrap
+python analysis/analyze_confound_adjusted_rollout.py      # confound-adjusted regression
+python analysis/bootstrap_confound_adjusted_effect.py     # its episode-cluster bootstrap
 ```
 
-**3. Matched predictive-sensitivity experiment, onset** (Section "Causal
-Sensitivity Around Contact Transitions", Table 1):
+**4. Matched predictive sensitivity around onset** (exploratory batch):
 ```bash
-python experiments/run_matched_sensitivity_onset.py               # exploratory batch
-python experiments/run_matched_sensitivity_onset_confirmation.py  # independent confirmation batch (seeds 100-109)
-python analysis/analyze_matched_sensitivity.py                    # Model 1 / Model 2 / matched-pair analysis
-python analysis/build_onset_combined_dataset.py                   # combines the two batches (re-indexed pair_ids)
+python experiments/run_matched_sensitivity_onset.py
+python analysis/analyze_matched_sensitivity.py
 ```
-`analyze_matched_sensitivity.py`'s `main()` analyzes the onset exploratory
-batch (`rq2_scaled_full.json`) by default; call `analyze()` directly (see its
-docstring) on `rq2_confirmation_full.json` for the confirmation-batch row, and
-on `build_onset_combined_dataset.py`'s output (`rq2_combined_full.json`) for
-the combined row:
+
+**5. Held-out onset confirmation** — independent replication on the
+confirmation batch, and the combined onset estimate:
+```bash
+python experiments/run_matched_sensitivity_onset_confirmation.py
+python analysis/build_onset_combined_dataset.py
+```
 ```python
 from analysis.analyze_matched_sensitivity import load, analyze
-analyze(load("rq2_combined_full.json"), label="COMBINED (original + confirmation, n=128)")
+analyze(load("rq2_confirmation_full.json"), label="onset confirmation")
+analyze(load("rq2_combined_full.json"), label="onset combined")
 ```
 
-**4. Matched predictive-sensitivity experiment, release** (Table 1, and the
-covariate-adjusted robustness check):
+**6. Matched predictive sensitivity around release** (exploratory,
+confirmation, and combined):
 ```bash
 python experiments/run_matched_sensitivity_release.py exploratory
 python experiments/run_matched_sensitivity_release.py confirmation
-python analysis/build_release_combined_dataset.py     # combines the two batches (re-indexed pair_ids)
-python analysis/bootstrap_covariate_adjusted_effect.py # Model 2, episode-cluster bootstrap (all 3 batches)
+python analysis/build_release_combined_dataset.py
 ```
-Call `analyze_matched_sensitivity.analyze(rows, treatment_label="release")`
-on each of the three release JSON files for the release rows of Table 1.
-
-**5. Isolated-release robustness check** (window-contamination restriction):
-```bash
-python analysis/build_isolated_release_subset.py     # selects transition-isolated release events + joins to existing results
-python analysis/analyze_isolated_release_subset.py   # thin entry point into the same analyze() used above
+```python
+from analysis.analyze_matched_sensitivity import load, analyze
+analyze(load("rq2_release_combined_full.json"), label="release combined", treatment_label="release")
 ```
 
-**6. Event-centered temporal profile** (Section "Temporal Structure of
-Predictive Sensitivity", Figure 2):
+**7. Covariate-adjusted release analysis** — release effect after
+additionally controlling for image displacement, action magnitude, object
+velocity/depth, and gripper distance, with an episode-cluster bootstrap:
 ```bash
-python analysis/audit_event_centered_eligibility.py  # pre-registered eligibility/contamination gate, no model inference
-python experiments/run_event_centered_sensitivity.py # the causal-splice sweep across the 7 offsets
+python analysis/bootstrap_covariate_adjusted_effect.py
+```
+
+**8. Isolated-release robustness check** — restricts to release events whose
+local window contains no neighboring contact transition:
+```bash
+python analysis/build_isolated_release_subset.py
+python analysis/analyze_isolated_release_subset.py
+```
+
+**9. Event-centered temporal profile** — sweeps the intervention across
+seven offsets around each transition:
+```bash
+python analysis/audit_event_centered_eligibility.py   # eligibility/contamination gate, no model inference
+python experiments/run_event_centered_sensitivity.py
 python analysis/analyze_event_centered_sensitivity.py
 ```
 
-**7. Tracker validation and physical interpretability** (Section
-"Qualitative and Physical Interpretation"):
+**10. Tracker validation and physical interpretation:**
 ```bash
 python validation/validate_cube_tracker.py
 python analysis/select_qualitative_examples.py
 python analysis/analyze_physical_interpretability.py
 ```
 
-**8. Figures:**
+**11. Generate figures:**
 ```bash
-python figures/plot_paper_figures.py        # Figure 1 (mechanism), Figure 2 (event-centered profile)
-python figures/plot_qualitative_rollouts.py # Figure 3 (qualitative rollouts)
+python figures/plot_paper_figures.py
+python figures/plot_qualitative_rollouts.py
 ```
 
 **Standalone validation checks** (not part of the statistical pipeline;
 require a real RoboSuite demonstration clip placed at
-`demo_data/door-lock/<clip>.npz` with the same layout documented in
+`demo_data/door-lock/<clip>.npz`, format documented in
 `validation/validate_checkpoint_loading.py`):
 ```bash
 python validation/validate_checkpoint_loading.py
@@ -196,84 +221,58 @@ python validation/validate_causal_splice.py
 python validation/benchmark_runtime.py
 ```
 
-## Included reference outputs
+## Reference outputs
 
 `reference_outputs/` contains small, final artifacts so a reader can inspect
-what the pipeline produces without rerunning it (large intermediates —
-raw episode pickles, per-record intervention JSON — are not included; they
-regenerate from the scripts above with the documented seeds).
+what the pipeline produces without rerunning it. Large intermediates (raw
+episode logs, per-record intervention data) are not included; they
+regenerate from the scripts above with the documented seeds.
 
-| File | Produced by | Supports |
-|---|---|---|
-| `rq1_pilot_summary.json` | `analysis/analyze_natural_rollout_error.py` | Rollout-error descriptive summary |
-| `rq1_confound_results.json` | `analysis/analyze_confound_adjusted_rollout.py` | Ceiling + motion/action confound regressions |
-| `rq1_model4_cluster_bootstrap.json` | `analysis/bootstrap_confound_adjusted_effect.py` | Paper's adjusted-effect cluster CI |
-| `rq2_scaled_analysis_results.json` | `analysis/analyze_matched_sensitivity.py` | Table 1, onset exploratory |
-| `rq2_combined_analysis_results.json` | `analyze_matched_sensitivity.analyze()` on `build_onset_combined_dataset.py`'s output | Table 1, onset combined |
-| `rq2_release_combined_analysis_results.json` | `analyze_matched_sensitivity.analyze()` on the combined release dataset | Table 1, release combined |
-| `rq2_event_centered_analysis_results.json` | `analysis/analyze_event_centered_sensitivity.py` | Figure 2 / event-centered profile |
-| `rq2_calibration.json` | `experiments/run_perturbation_calibration.py` | Calibration sweep (direction/depth dependence) |
-| `qualitative/physical_interpretability_results.json` | `analysis/analyze_physical_interpretability.py` | Spearman correlation, aggregate tracker stats |
-| `qualitative/tracker_validation_errors.npz`, `tracker_validation_vqrecon_errors.npy` | `validation/validate_cube_tracker.py` | Tracker resolution band |
-| `qualitative/final_figures/*.pdf` | `figures/plot_paper_figures.py`, `figures/plot_qualitative_rollouts.py` | Figures 1–3 as embedded in the paper |
-
-All are generated directly by the script listed, except the two combined
-analysis results, each derived by calling the onset/release-shared
-`analyze()` function on `build_onset_combined_dataset.py`'s or
-`build_release_combined_dataset.py`'s output respectively.
-
-### Serialized artifact filenames
-
-The intermediate/output filenames below keep their original names from this
-project's development history (`rq1_...`, `rq2_...`) rather than being
-renamed for cosmetic consistency with the surrounding script names — renaming
-them would touch every consumer across `experiments/`, `analysis/`, and
-`figures/` for no reproducibility benefit. Their meanings:
-
-| Filename pattern | Meaning |
+| Result | File |
 |---|---|
-| `pilot_episodes.pkl` / `pilot_episodes_confirmation.pkl` | Raw per-timestep logs for the exploratory (seeds 0–9) / confirmation (seeds 100–109) episode batches |
-| `rq1_pilot_*` | Natural rollout-error experiment (Section "Contact-Conditioned Rollout Dynamics") — curves, events, summary, plot |
-| `rq1_confound_results.json`, `rq1_model4_cluster_bootstrap.json` | The confound-adjusted regression ("Model 4") and its cluster-bootstrap uncertainty |
-| `rq2_scaled_full.json` / `rq2_confirmation_full.json` / `rq2_combined_full.json` | Onset matched-sensitivity experiment: exploratory / confirmation / combined event records |
-| `rq2_release_*_full.json` | The same, for the release experiment |
-| `rq2_isolated_release_*` | The isolated (transition-clean) release subset |
-| `rq2_event_centered_*` | The event-centered temporal-profile sweep and its analysis |
-| `rq2_calibration.{json,csv}` | The perturbation calibration sweep |
+| Natural rollout-error summary | `rq1_pilot_summary.json` |
+| Confound-adjusted regression | `rq1_confound_results.json` |
+| Confound-adjusted episode-cluster bootstrap | `rq1_model4_cluster_bootstrap.json` |
+| Matched sensitivity, onset exploratory | `rq2_scaled_analysis_results.json` |
+| Matched sensitivity, onset combined | `rq2_combined_analysis_results.json` |
+| Matched sensitivity, release combined | `rq2_release_combined_analysis_results.json` |
+| Event-centered temporal profile | `rq2_event_centered_analysis_results.json` |
+| Perturbation calibration sweep | `rq2_calibration.json` |
+| Physical-interpretability statistics (tracker vs. token divergence) | `qualitative/physical_interpretability_results.json` |
+| Tracker validation error distributions | `qualitative/tracker_validation_errors.npz`, `qualitative/tracker_validation_vqrecon_errors.npy` |
+| Final paper figures | `qualitative/final_figures/*.pdf` |
 
 ## Expected key numerical results (sanity check)
 
-- Natural rollout error: release slope 0.0125→0.0004 (bootstrap diff −0.0119,
-  95% CI [−0.0179,−0.0062]); onset diff −0.0019, 95% CI [−0.0071,0.0033].
-- Confound-adjusted (Model 4, episode-cluster bootstrap): release
+- **Natural rollout-error bootstrap** (event-wise resampling): release slope
+  0.0125→0.0004 (bootstrap diff −0.0119, 95% CI [−0.0179,−0.0062]); onset
+  diff −0.0019, 95% CI [−0.0071,0.0033].
+- **Confound-adjusted analysis** (episode-cluster bootstrap, a separate,
+  later analysis from the natural rollout-error bootstrap above): release
   β≈−0.00348, 95% CI [−0.00442,+0.00279]; onset β≈−0.00148, 95% CI
-  [−0.00377,+0.00685].
-- Matched sensitivity, combined: onset β≈−0.95, 95% CI [−1.74,−0.19];
+  [−0.00377,+0.00685]. Both intervals include zero — this adjusted
+  observational estimate is not statistically significant.
+- **Matched sensitivity, combined**: onset β≈−0.95, 95% CI [−1.74,−0.19];
   release β≈+2.53, 95% CI [+1.61,+3.53].
-- Covariate-adjusted robustness (Model 2, combined release, episode-cluster
+- **Covariate-adjusted release analysis** (combined, episode-cluster
   bootstrap): β≈+2.17, 95% CI [+1.14,+3.63], p≈0.0007.
-- Isolated-release subset (combined, n=14 pairs): β≈+2.64, 95% CI
-  [+0.52,+4.97].
-- Event-centered profile: onset rises from D̄=4.42 (Δt=−3) to 9.56 (Δt=+2, no
-  usable data at +3); release falls from 7.60 to 4.65 over the same range,
-  with a small uptick to 5.14 at Δt=+3.
+- **Isolated-release robustness check** (combined, n=14 pairs): β≈+2.64,
+  95% CI [+0.52,+4.97].
+- **Event-centered temporal profile**: onset rises from D̄=4.42 (Δt=−3) to
+  9.56 (Δt=+2, no usable data at +3); release falls from 7.60 to 4.65 over
+  the same range, with a small uptick to 5.14 at Δt=+3.
 
 ## Reproducibility notes
 
-- Seeds are fixed throughout: episode generation (0–9 exploratory, 100–109
-  confirmation), all bootstrap procedures (seed 0 unless noted in the
-  script), and greedy (non-sampling) decoding everywhere.
-- All statistical procedures — event-wise vs. episode-cluster bootstraps,
-  matching logic, calibration thresholds, eligibility/exclusion criteria —
-  are implemented exactly as described in the paper; see each script's
-  module docstring for the specific procedure it implements.
-- A small number of intermediate steps (documented in each script) were
-  originally run once as short inline computations rather than as saved
-  scripts; where this project could recover the exact original computation,
-  it has been reconstructed as a canonical script here
-  (`bootstrap_natural_rollout_effect.py`, `analyze_isolated_release_subset.py`,
-  `build_release_combined_dataset.py`) and verified to reproduce the exact
-  originally reported values.
+- Episode generation uses fixed seeds throughout: 0–9 for the exploratory
+  batch, 100–109 for the held-out confirmation batch.
+- All bootstrap procedures use a fixed random seed (0, unless otherwise
+  noted in the relevant script).
+- All model rollouts use greedy (non-sampling) decoding.
+- Full regeneration of the intervention results requires running the model
+  checkpoint (`experiments/`); this is the expensive part of the pipeline.
+  `analysis/`, `figures/`, and the lightweight `reference_outputs/` do not
+  require rerunning it.
 
 ## Citation
 
@@ -281,7 +280,7 @@ A public citation will be added once the paper is available. In the
 meantime:
 
 ```bibtex
-@misc{predictive-sensitivity-contact-transitions,
+@misc{video-world-model-contact-sensitivity,
   title  = {Predictive Sensitivity Across Contact Transitions in a Video World Model},
   author = {Anonymous},
   year   = {2026},
@@ -303,7 +302,6 @@ meantime:
 
 This project builds on [iVideoGPT](https://github.com/thuml/iVideoGPT)
 (Wu et al., NeurIPS 2024) and its publicly released
-`ivideogpt-vp2-robosuite-64-act-cond` checkpoint. We use the checkpoint and
-the `ivideogpt.vq_model`/`ivideogpt.transformer` modules unmodified; all
-intervention, environment-reconstruction, and analysis code in this
-repository is new.
+`ivideogpt-vp2-robosuite-64-act-cond` checkpoint, used unmodified. The
+environment reconstruction, the intervention/evaluation pipeline, and all
+experiment and analysis code in this repository are part of this work.

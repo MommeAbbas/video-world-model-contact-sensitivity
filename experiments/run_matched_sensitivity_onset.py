@@ -1,13 +1,9 @@
 """
 Matched predictive-sensitivity experiment, onset, exploratory batch (paper
-Section "Causal Sensitivity Around Contact Transitions", Table 1: Onset /
-Exploratory). Reuses the 10 exploratory pilot episodes and the calibrated
-simulator-clean intervention mechanism (src/matched_sensitivity.py). For
-every onset event, does a per-event adaptive epsilon search to land injection
-Hamming in [2,5]/16, finds the best-matched free-motion control (nearest
-neighbor on action/velocity/depth covariates from a larger candidate pool),
-runs the same adaptive search + intervention on the control, and records the
-full set of identity/injection/covariate/outcome fields.
+Table 1: Onset / Exploratory). For every onset event, runs the calibrated
+adaptive-epsilon intervention (src/matched_sensitivity.py) and its
+nearest-neighbor-matched free-motion control, recording the full
+identity/injection/covariate/outcome fields for both.
 """
 import json
 import os
@@ -60,7 +56,7 @@ def main():
               f"downstream={r_control['downstream_divergence']}")
 
         if (i + 1) == 20:
-            print("\n" + "=" * 60 + f"\nINTERIM CHECKPOINT at {i+1} pairs\n" + "=" * 60)
+            print(f"\ninterim checkpoint at {i+1} pairs")
             _save(results, "rq2_scaled_interim20.json")
 
     _save(results, "rq2_scaled_full.json")

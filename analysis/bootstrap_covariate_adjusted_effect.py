@@ -1,14 +1,13 @@
 """
-Episode-cluster bootstrap for Model 2 (the covariate-adjusted regression from
-analyze_matched_sensitivity.py: contact_status + injection_hamming +
+Episode-cluster bootstrap for Model 2, the covariate-adjusted regression
+from analyze_matched_sensitivity.py (contact_status + injection_hamming +
 image_displacement + action_magnitude + object_velocity + object_depth +
-gripper_distance) -- refits the exact Model 2 specification inside every
-episode-level resample, exactly as Model 1's beta_contact/beta_release
-already is inside analyze_matched_sensitivity.analyze(). This is the
-correctly-clustered uncertainty for the paper's Section "Causal Sensitivity
-Around Contact Transitions" robustness claim ("The effect also survives
-adjustment for image displacement and gripper-object distance"):
-beta ~= +2.17, 95% cluster CI ~= [+1.14, +3.63], p ~= 0.0007 (combined batch).
+gripper_distance): refits the specification inside every episode-level
+resample, as Model 1's beta_contact already is inside analyze(). This is
+the correctly-clustered uncertainty behind the paper's robustness claim that
+the effect survives adjustment for image displacement and gripper-object
+distance: beta ~= +2.17, 95% cluster CI ~= [+1.14, +3.63], p ~= 0.0007
+(combined batch).
 """
 import os
 import sys
@@ -72,13 +71,11 @@ def bootstrap_model2(rows, treatment_label, n_boot=3000, seed=0):
 
 
 def main():
-    print("=" * 70)
     print("Episode-cluster bootstrap for Model 2 (release, refit inside resamples)")
-    print("=" * 70)
     for name, label in [
-        ("rq2_release_exploratory_full.json", "EXPLORATORY (seeds 0-9)"),
-        ("rq2_release_confirmation_full.json", "CONFIRMATION (seeds 100-109)"),
-        ("rq2_release_combined_full.json", "COMBINED"),
+        ("rq2_release_exploratory_full.json", "exploratory (seeds 0-9)"),
+        ("rq2_release_confirmation_full.json", "confirmation (seeds 100-109)"),
+        ("rq2_release_combined_full.json", "combined"),
     ]:
         rows = load(name)
         result = bootstrap_model2(rows, treatment_label="release")

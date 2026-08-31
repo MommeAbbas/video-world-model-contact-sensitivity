@@ -1,31 +1,18 @@
 """
 Perturbation-instrument calibration sweep (paper Section "Simulator-Grounded
-Causal Sensitivity" -- "our calibration sweep shows that the mapping depends
-on direction and depth").
+Causal Sensitivity": the mapping from physical displacement to token change
+depends on direction and depth).
 
-For the cube (push_center_multi.py's primary/largest object -- see
-src/simulator_interface.py::object_joint_name), at each of 3 depths
-(near/middle/far, chosen to span the task's valid placement range along the
-camera's actual depth axis) and 3 camera-relative directions (lateral X,
-lateral/vertical Y, depth Z -- from actual camera extrinsics, not assumed
-world axes), sweep physical displacement epsilon in
-{1,2,5,10,20,40,60,80} mm and measure:
+For the cube, at each of 3 depths (near/middle/far) and 3 camera-relative
+directions (lateral X, lateral/vertical Y, depth Z, from actual camera
+extrinsics), sweeps epsilon in {1,2,5,10,20,40,60,80}mm and records the
+actual vs. requested translation, projected pixel displacement, whole-frame
+MAE, and dyna-token Hamming distance/changed grid cells.
 
-  physical: requested vs actual object translation (simulator ground truth)
-  image:    projected pixel displacement (analytic, via camera geometry) +
-            whole-frame MAE (secondary, coarse signal only)
-  token:    dyna-token Hamming distance / fraction changed / which of the
-            4x4 grid cells changed
-
-Protocol per trial: restore identical baseline state -> modify ONLY the
-target object's translation -> mujoco.mj_forward() -> render -> tokenize.
-mj_step() is never called.
-
-Controls included: (A) repeated restore+render+tokenize of the same baseline
-state per depth (determinism), (B) actual vs requested displacement
-(simulator ground truth), (C) diff of full qpos vectors before/after to
-confirm nothing else changed, (D) a single render/preprocess code path used
-throughout (src/simulator_interface.py::render_raw + preprocess_to_model_input).
+Each trial restores an identical baseline state, perturbs only the target
+object, calls mj_forward (never mj_step), then renders and tokenizes.
+Controls: repeated baseline restore/render/tokenize (determinism), and a
+qpos diff confirming no state besides the target object's position changed.
 """
 import json
 import os
@@ -44,11 +31,9 @@ OUT_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 
 
 def choose_depth_states(env):
-    """Pick 3 object x-positions spanning the placement sampler's valid
-    x_range=[-0.1, 0.3] (push_center_multi.py:479), scored by actual camera
-    depth (dot product with the camera's real depth axis) rather than
-    assumed. y=0 (table-center) and z = table surface + z_offset + half-height,
-    matching the sampler's own conventions (push_center_multi.py:485-486).
+    """3 object x-positions spanning the placement sampler's x_range=[-0.1,0.3],
+    scored by actual camera depth rather than assumed. y=0, z = table
+    surface + z_offset + half-height.
     """
     candidates_x = [-0.08, 0.0, 0.1, 0.2, 0.28]
     z = 0.8 + 0.01 + 0.06  # table_offset_z + z_offset + cube half-size
@@ -56,8 +41,7 @@ def choose_depth_states(env):
     scored = []
     for x in candidates_x:
         pos = np.array([x, 0.0, z])
-        # Euclidean distance to camera -- unambiguous "near/far" regardless of
-        # the depth axis's sign convention.
+        # Euclidean distance to camera, independent of the depth axis's sign convention.
         dist = float(np.linalg.norm(pos - cam_pos))
         scored.append((dist, x, pos))
     scored.sort(key=lambda t: t[0])  # ascending distance: index 0 = nearest camera
@@ -111,7 +95,7 @@ def run():
         dyna_base = lib.tokenize_single_frame_dyna(tokenizer, context_base, frame_base, device)[0].cpu().numpy()
         pix_base = lib.world_to_pixel(env, base_pos)
 
-        # --- Control A: repeat restore+render+tokenize of the SAME baseline ---
+        # Control: repeat restore+render+tokenize of the same baseline.
         lib.restore_state(env, baseline_snap)
         img_base2 = lib.render_raw(env)
         frame_base2 = lib.preprocess_to_model_input(img_base2).to(device)
@@ -131,11 +115,11 @@ def run():
                 lib.restore_state(env, baseline_snap)
                 qpos_before_perturb = env.sim.get_state().qpos.copy()
 
-                # perturb ONLY the target object's translation
+                # Perturb only the target object's translation.
                 new_pos = base_pos + eps_m * dir_vec
                 lib.set_object_world_pos(env, new_pos, OBJ_INDEX)
 
-                # Control C: confirm nothing else in qpos changed except this object's xyz
+                # Confirm nothing else in qpos changed except this object's xyz.
                 qpos_after_perturb = env.sim.get_state().qpos.copy()
                 addr, _ = lib.get_qpos_addr(env, OBJ_INDEX)
                 mask = np.ones_like(qpos_after_perturb, dtype=bool)
@@ -194,7 +178,7 @@ def run():
             writer.writerow(r2)
 
     print(f"\nSaved {len(rows)} trials to {csv_path}")
-    print("\nControl A (determinism of repeated baseline restore+render+tokenize):")
+    print("\nDeterminism control (repeated baseline restore/render/tokenize):")
     for c in control_rows:
         print(f"  {c}")
 

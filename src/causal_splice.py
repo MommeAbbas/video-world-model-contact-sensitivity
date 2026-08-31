@@ -1,67 +1,43 @@
 """
-Reimplementation of the per-frame generation loop used by
-ivideogpt.transformer.action_model.HeadModelWithAction.generate() (see that file,
-lines 56-121), generalized to support:
+Reimplementation of the per-frame generation loop in
+ivideogpt.transformer.action_model.HeadModelWithAction.generate() (lines
+56-121), generalized to stop after an arbitrary frame t (prefix phase) and
+resume from a reconstructed token prefix (continuation phase), rebuilding
+embeddings fresh from token ids and actions with no hidden state carried
+across the boundary. Does not modify action_model.py; calls the same public
+methods (get_input_embeddings, action_linear, llm.generate) the original
+loop uses.
 
-  1. stopping generation after an arbitrary intermediate frame t ("prefix" phase), and
-  2. resuming generation from an arbitrary reconstructed token prefix ("continuation"
-     phase), rebuilding all embeddings fresh from token ids + actions only -- no
-     hidden Python/cache state is carried across the stop/resume boundary.
+Three architecture facts this relies on:
 
-This module does NOT modify ivideogpt/transformer/action_model.py. It calls the
-model's public methods (get_input_embeddings, action_linear, llm.generate) --
-the exact same primitives HeadModelWithAction.generate() itself uses -- so the
-per-frame mechanics are faithfully reproduced rather than approximated.
+- generate() calls llm.generate() once per frame with use_cache scoped to
+  that single call; there is no persistent KV-cache across frames in Python
+  (action_model.py:101-113). The causal prefix is therefore fully
+  represented by the token/embedding tensors, which is what makes a clean
+  prefix splice possible.
+- Action conditioning is an in-place additive perturbation of one embedding
+  vector per frame (the sdf token before that frame's 16 dyna tokens), not
+  extra tokens (action_model.py:80-81, 174-177). Reconstructing
+  inputs_embeds from token ids alone is therefore insufficient after the
+  first frame; the action additions for every prior frame must be replayed.
+- Per compressive_vq_model.py's tokenize()/detokenize(), each frame's 16
+  dyna tokens depend only on the fixed context frames, not on other future
+  frames (context features are broadcast across future_length,
+  compressive_vq_model.py:174-191). A single future frame can therefore be
+  tokenized in isolation and yields the same tokens as in a longer clip,
+  which is what makes decode-modify-retokenize valid.
 
-Architecture facts this relies on (verified by reading action_model.py and
-compressive_vq_model.py):
-
-  - HeadModelWithAction.generate() is a hand-written Python loop, NOT a single
-    call to transformers' generate(). It calls self.llm.generate() once per
-    future frame ("dyna block"), with use_cache=True *scoped to that single call*.
-    There is no KV-cache object that persists across frames in Python: each
-    iteration recomputes `inputs_embeds` by concatenation
-    (action_model.py:113) and calls self.llm.generate(inputs_embeds=...) fresh
-    on the whole grown sequence (action_model.py:101-110). This means the
-    causal prefix is fully and only represented by the token/embedding
-    tensors, not by any persistent cache -- exactly the precondition needed
-    for a clean prefix-splice intervention.
-
-  - Action conditioning is injected by an in-place *additive* perturbation of
-    one embedding vector per frame (the "sdf" boundary token immediately
-    preceding that frame's 16 dyna tokens), not as extra tokens
-    (action_model.py:80-81, 174-177). Consequently, reconstructing
-    `inputs_embeds` from token ids via get_input_embeddings() alone is NOT
-    sufficient after the first frame -- the action-embedding additions for
-    every already-generated frame must be replayed. `continue_from_prefix`
-    below does this explicitly and deterministically from (tokens, actions)
-    alone.
-
-  - Per ivideogpt/vq_model/compressive_vq_model.py `tokenize()`/`detokenize()`,
-    each future frame's 16 "dyna" tokens are a VQ code for that frame
-    conditioned only on the fixed context frames (cond_features come from the
-    context encoder and are simply broadcast-repeated across future_length,
-    compressive_vq_model.py:174-191) -- NOT autoregressively conditioned on
-    other future frames at the tokenizer level. So a single future frame can
-    be tokenized in isolation (context frames + that one frame, future_length=1)
-    and will yield the same dyna tokens as if tokenized as part of a longer
-    clip. This is what makes "decode frame t -> modify pixels -> re-tokenize
-    frame t alone" a valid, non-approximate operation.
-
-Token layout (context_length=2, so prelude_tokens_num=513, tokens_num_per_dyna=16):
-  indices [0, 513)   : context tokens (2 context frames x 257 tokens, minus 1
-                       dropped leading scf token -- see compressive_vq_model.py:208)
-  index   513        : sdf token for frame 0 (also the tensor slot the action
-                       for frame 0 is added onto)
-  indices [514, 530) : 16 dyna tokens for frame 0
-  index   530        : sdf token for frame 1
-  indices [531, 547) : 16 dyna tokens for frame 1
+Token layout (context_length=2: prelude_tokens_num=513, tokens_num_per_dyna=16):
+  [0, 513)   context tokens (2 frames x 257, minus one dropped leading scf token)
+  513        sdf token for frame 0 (action for frame 0 adds onto this slot)
+  [514, 530) dyna tokens for frame 0
+  530        sdf token for frame 1
+  [531, 547) dyna tokens for frame 1
   ... (period 17 = tokens_num_per_dyna + 1)
 
-  sdf_pos(i)        = prelude_tokens_num + i * (tokens_num_per_dyna + 1)
-  dyna_start(i)     = sdf_pos(i) + 1
-  dyna_end(i)       = dyna_start(i) + tokens_num_per_dyna   (exclusive)
-  tokens length after frame i complete = prelude_tokens_num + 1 + (i+1)*(tokens_num_per_dyna+1)
+  sdf_pos(i)    = prelude_tokens_num + i * (tokens_num_per_dyna + 1)
+  dyna_start(i) = sdf_pos(i) + 1
+  dyna_end(i)   = dyna_start(i) + tokens_num_per_dyna
 """
 import torch
 
@@ -80,22 +56,14 @@ def dyna_slice(model, i):
 def generate_frames(model, inputs_token, action, start_frame, end_frame_exclusive,
                      do_sample=False, temperature=1.0, top_k=100, pad_token_id=50256,
                      inputs_embeds=None):
-    """Generate future frames [start_frame, end_frame_exclusive) (0-indexed among
-    predicted frames), appending to inputs_token.
+    """Generate frames [start_frame, end_frame_exclusive), appending to inputs_token.
 
-    If inputs_embeds is None, it is rebuilt from scratch from inputs_token via
-    model.get_input_embeddings(), with the action-embedding additions for every
-    frame boundary < start_frame replayed explicitly. This is the "fresh
-    continuation" path: it takes NO hidden state, only (inputs_token, action,
-    start_frame) -- proving frames are conditioned purely on the reconstructed
-    tensor prefix, not on any Python object carried over from a prior call.
-
-    If inputs_embeds is provided (already-correct running embeddings from a
-    live loop), it is used as-is and just extended -- this is the "normal, no
-    intervention" path used to build the initial prefix.
-
-    Returns (inputs_token, inputs_embeds) after generating through
-    end_frame_exclusive - 1.
+    If inputs_embeds is None, it is rebuilt from inputs_token via
+    get_input_embeddings(), replaying the action-embedding additions for
+    every frame boundary before start_frame (the fresh-continuation path:
+    conditioned only on (inputs_token, action, start_frame), no carried
+    Python state). If inputs_embeds is provided, it is extended as-is (the
+    no-intervention path used to build the initial prefix).
     """
     device = inputs_token.device
     action_embeds = model.action_linear(action)
@@ -115,7 +83,7 @@ def generate_frames(model, inputs_token, action, start_frame, end_frame_exclusiv
         pos = sdf_pos(model, i)
         assert pos == inputs_embeds.shape[1] - 1, (
             f"action injection position {pos} does not point at the last embedding "
-            f"slot ({inputs_embeds.shape[1] - 1}) -- prefix/embeds are out of sync")
+            f"slot ({inputs_embeds.shape[1] - 1}), prefix/embeds are out of sync")
         inputs_embeds[:, pos, :] += action_embeds[:, i + model.context - 1, :]
 
         predicted_token = model.llm.generate(
@@ -140,9 +108,8 @@ def generate_frames(model, inputs_token, action, start_frame, end_frame_exclusiv
 
 @torch.no_grad()
 def decode_single_frame_pixels(tokenizer, inputs_token, model, frame_idx):
-    """Decode just frame_idx (0-indexed among predicted frames) to pixel space,
-    using tokenizer.detokenize() with future_length=1 (context tokens + that
-    frame's sdf+dyna tokens only). Returns pixel tensor (B, 3, H, W) in [0,1].
+    """Decode frame_idx to pixel space via detokenize() with future_length=1
+    (context tokens plus that frame's sdf+dyna tokens only). Returns (B,3,H,W) in [0,1].
     """
     context_tokens = inputs_token[:, :model.prelude_tokens_num]
     start, end = dyna_slice(model, frame_idx)
@@ -154,10 +121,9 @@ def decode_single_frame_pixels(tokenizer, inputs_token, model, frame_idx):
 
 @torch.no_grad()
 def retokenize_single_frame(tokenizer, context_pixel_values, modified_frame_pixels, context_length):
-    """Re-tokenize a single (possibly modified) future frame conditioned on the
-    given context frames, exactly as tokenizer.tokenize() would if it were part
-    of a longer clip (see module docstring: dyna tokens only depend on context,
-    not on other future frames). Returns the 16 dyna tokens (B, 16).
+    """Re-tokenize one future frame against the given context, as tokenize()
+    would if it were part of a longer clip (see module docstring). Returns
+    the 16 dyna tokens as (B,16).
     """
     clip = torch.cat([context_pixel_values, modified_frame_pixels.unsqueeze(1)], dim=1)
     tokens, _ = tokenizer.tokenize(clip, context_length)
@@ -168,12 +134,9 @@ def retokenize_single_frame(tokenizer, context_pixel_values, modified_frame_pixe
 
 @torch.no_grad()
 def splice_frame(model, tokenizer, inputs_token, context_pixel_values, frame_idx, modify_fn):
-    """Replace frame_idx's 16 dyna tokens in inputs_token with tokens obtained by:
-      1. decoding frame_idx to pixels,
-      2. applying modify_fn(pixels) -> modified pixels,
-      3. re-tokenizing the modified frame against the same context.
-
-    Returns a NEW inputs_token tensor (original is not mutated in place).
+    """Replace frame_idx's 16 dyna tokens: decode to pixels, apply modify_fn,
+    re-tokenize against the same context. Returns a new tensor; inputs_token
+    is not mutated.
     """
     orig_pixels = decode_single_frame_pixels(tokenizer, inputs_token, model, frame_idx)
     modified_pixels = modify_fn(orig_pixels).clamp(0.0, 1.0)

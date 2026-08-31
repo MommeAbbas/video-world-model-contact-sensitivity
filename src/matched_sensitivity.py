@@ -102,9 +102,8 @@ def window_covariates(log, t_event, env):
 
 
 def all_control_candidates(episodes):
-    """All (seed,t) with NO contact transition (for the cube) anywhere in the
-    12-step window and enough margin -- a larger pool than the original
-    34-candidate pilot set, for proper nearest-neighbor matching.
+    """All (seed,t) with no cube contact transition anywhere in the 12-step
+    window, for nearest-neighbor control matching.
     """
     candidates = []
     for seed, log in episodes.items():

@@ -29,12 +29,9 @@ OUT_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 QUAL_DIR = os.path.join(OUT_DIR, "qualitative")
 os.makedirs(QUAL_DIR, exist_ok=True)
 
-# ---------------------------------------------------------------------------
-# Step 1: objective selection (no visual cherry-picking). Score = distance to
-# group median divergence + 0.5*distance to group median injection_hamming,
-# with a hard penalty for hit_target_band=False. Ties broken deterministically
-# by (lowest seed, lowest tau) -- never by inspecting the images.
-# ---------------------------------------------------------------------------
+# Objective selection (no visual cherry-picking): score = distance to group
+# median divergence + 0.5*distance to group median injection_hamming, with a
+# hard penalty for hit_target_band=False. Ties broken by (lowest seed, lowest tau).
 CATEGORIES = [("onset", -3), ("onset", 2), ("release", -3), ("release", 2)]
 N_EXTRAS = 2  # additional near-top candidates per category, kept only to sanity-check the selection
 
@@ -59,9 +56,6 @@ def select_candidates(rows):
     return selections
 
 
-# ---------------------------------------------------------------------------
-# Step 2: deterministic reconstruction with HARD-FAIL verification.
-# ---------------------------------------------------------------------------
 def reconstruct(env, tokenizer, model, device, episodes, record):
     seed, tau, dt, batch = record["seed"], record["tau"], record["dt"], record["batch"]
     log = episodes[batch][seed]
@@ -72,12 +66,13 @@ def reconstruct(env, tokenizer, model, device, episodes, record):
     frame_base, frame_pert, pix_base, pix_pert = render_clean_pair_at(
         env, log, t_i, record["epsilon_mm"], direction="lateral_x")
 
+    # Hard-fail if the reconstruction doesn't match the stored result: never
+    # build a figure from an unverified reconstruction.
     hamming, diff_mask = hamming_only(tokenizer, model, context, frame_base, frame_pert, device)
     if hamming != record["injection_hamming"]:
         raise RuntimeError(
-            f"RECONSTRUCTION MISMATCH (injection_hamming): stored={record['injection_hamming']} "
-            f"reconstructed={hamming} for seed={seed} tau={tau} dt={dt}. STOPPING -- "
-            f"do not build any figure from an unverified reconstruction.")
+            f"reconstruction mismatch (injection_hamming): stored={record['injection_hamming']} "
+            f"reconstructed={hamming} for seed={seed} tau={tau} dt={dt}")
 
     prefix_A = build_prefix_tokens(tokenizer, model, context, frame_base, device)
     prefix_B = build_prefix_tokens(tokenizer, model, context, frame_pert, device)
@@ -91,10 +86,9 @@ def reconstruct(env, tokenizer, model, device, episodes, record):
     div = divergence_curve(model, tokens_A, tokens_B, 1, 4)
     if div != record["downstream_divergence"]:
         raise RuntimeError(
-            f"RECONSTRUCTION MISMATCH (downstream_divergence): stored={record['downstream_divergence']} "
-            f"reconstructed={div} for seed={seed} tau={tau} dt={dt}. STOPPING -- "
-            f"do not build any figure from an unverified reconstruction.")
-    print(f"  VERIFIED exact match: seed={seed} tau={tau} dt={dt} batch={batch} "
+            f"reconstruction mismatch (downstream_divergence): stored={record['downstream_divergence']} "
+            f"reconstructed={div} for seed={seed} tau={tau} dt={dt}")
+    print(f"  verified exact match: seed={seed} tau={tau} dt={dt} batch={batch} "
           f"hamming={hamming} div={div}")
 
     with torch.no_grad():
@@ -131,13 +125,13 @@ def main():
     with open(os.path.join(OUT_DIR, "rq2_event_centered_results.json")) as f:
         rows = json.load(f)
 
-    print("=" * 70 + "\nSTEP 1: objective selection\n" + "=" * 70)
+    print("\nObjective selection:")
     selections = select_candidates(rows)
     for key, sel in selections.items():
         r = sel["primary"]
         print(f"\n[{key}] n_candidates={sel['n_candidates']} median_div={sel['median_div']:.2f} "
               f"median_hamming={sel['median_ham']:.1f}")
-        print(f"  PRIMARY: seed={r['seed']} batch={r['batch']} tau={r['tau']} hit_band={r['hit_target_band']} "
+        print(f"  primary: seed={r['seed']} batch={r['batch']} tau={r['tau']} hit_band={r['hit_target_band']} "
               f"hamming={r['injection_hamming']} eps={r['epsilon_mm']} div={r['downstream_divergence']} "
               f"mean_div={r['mean_downstream_divergence']:.2f}")
         for e in sel["extras"]:
@@ -150,11 +144,11 @@ def main():
     with open(os.path.join(QUAL_DIR, "selected_records_manifest.json"), "w") as f:
         json.dump(manifest, f, indent=2)
 
-    print("\n" + "=" * 70 + "\nSTEP 2+3: deterministic reconstruction (hard-fail verified) + decode\n" + "=" * 70)
+    print("\nDeterministic reconstruction (hard-fail verified) and decode:")
     env = lib.build_env(seed=0)
     reconstructed = {}
     for key, sel in selections.items():
-        print(f"\n--- {key} (primary + {len(sel['extras'])} extras) ---")
+        print(f"\n{key} (primary + {len(sel['extras'])} extras)")
         reconstructed[key] = {"primary": reconstruct(env, tokenizer, model, device, episodes, sel["primary"])}
         reconstructed[key]["extras"] = [reconstruct(env, tokenizer, model, device, episodes, e)
                                           for e in sel["extras"]]

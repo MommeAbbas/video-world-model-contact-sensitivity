@@ -1,16 +1,13 @@
 """
 Physical-interpretability analysis (paper Section "Qualitative and Physical
-Interpretation"): applies the validated cube tracker
-(src/cube_tracker.py, validated in validation/validate_cube_tracker.py) to a
-deterministic, non-cherry-picked sample of the already-computed
-event-centered reconstructions, re-derived using the exact stored epsilon
-(no re-search) and the exact frozen reconstruction functions -- the same
-procedure verified in select_qualitative_examples.py, just also capturing
-decoded pixels for tracking. Not a new experiment: no metric, offset,
-perturbation, or episode selection is changed.
+Interpretation"): applies the validated cube tracker (src/cube_tracker.py)
+to a deterministic sample of already-computed event-centered
+reconstructions, re-derived using the exact stored epsilon and
+reconstruction functions, additionally capturing decoded pixels for
+tracking. No metric, offset, perturbation, or episode selection is changed.
 
-Sample: up to N_PER_CELL records per (event_type, dt) cell, taken in sorted
-(seed, tau) order (deterministic, not selected by outcome).
+Sample: up to N_PER_CELL records per (event_type, dt) cell, in sorted
+(seed, tau) order, not selected by outcome.
 """
 import json
 import os
@@ -120,9 +117,9 @@ def main():
         log = episodes[rec["batch"]][rec["seed"]]
         out = reconstruct_and_track(env, tokenizer, model, device, log, rec["tau"], rec["dt"], rec["epsilon_mm"])
         assert out["hamming"] == rec["injection_hamming"], (
-            f"MISMATCH hamming: stored={rec['injection_hamming']} got={out['hamming']} for {rec}")
+            f"hamming mismatch: stored={rec['injection_hamming']} got={out['hamming']} for {rec}")
         assert out["downstream_divergence"] == rec["downstream_divergence"], (
-            f"MISMATCH divergence: stored={rec['downstream_divergence']} got={out['downstream_divergence']} for {rec}")
+            f"divergence mismatch: stored={rec['downstream_divergence']} got={out['downstream_divergence']} for {rec}")
 
         track_A = [out["cent_base"]] + out["cent_A"]
         track_B = [out["cent_pert"]] + out["cent_B"]

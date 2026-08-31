@@ -1,17 +1,14 @@
 """
-Validates src/cube_tracker.py against simulator-projected ground truth before
-it is used on any decoded/generated rollout frame (paper Section "Qualitative
-and Physical Interpretation": "median error 1.11-1.27px, real versus
-VQ-reconstructed frames; 1.4% and 0% detection-failure rates respectively").
+Validates src/cube_tracker.py against simulator-projected ground truth
+before it is used on any decoded/generated rollout frame (paper: "median
+error 1.11-1.27px, real versus VQ-reconstructed frames; 1.4% and 0%
+detection-failure rates respectively").
 
-Two checks:
-  1. validate_on_episode: real simulator renders, sampled every 3rd timestep
-     across every logged episode -- no model inference.
-  2. VQ-reconstruction round trip: every 5th timestep (t=2,7,12,...) of the
-     first 5 episodes per batch, tokenized and detokenized through the real
-     checkpoint (a tokenize/detokenize round trip, not a generation), tracked
-     on the reconstructed frame and compared to the same ground-truth pixel
-     projection.
+Two checks: validate_on_episode tracks real simulator renders (every 3rd
+timestep, no model inference); validate_on_vq_reconstruction tracks frames
+after a tokenize/detokenize round trip through the checkpoint (every 5th
+timestep, first 5 episodes per batch), both compared to the same
+ground-truth pixel projection.
 """
 import os
 import pickle
@@ -83,7 +80,7 @@ def main():
 
     env = lib.build_env(seed=0)
 
-    print("=" * 70 + "\nCheck 1: real simulator renders\n" + "=" * 70)
+    print("Check 1: real simulator renders")
     all_errors = []
     all_failures = 0
     all_n = 0
@@ -111,7 +108,7 @@ def main():
     np.savez(os.path.join(QUAL_DIR, "tracker_validation_errors.npz"), errors=all_errors,
               n_total=all_n, n_failures=all_failures)
 
-    print("\n" + "=" * 70 + "\nCheck 2: VQ-reconstructed frames (tokenize/detokenize round trip)\n" + "=" * 70)
+    print("\nCheck 2: VQ-reconstructed frames (tokenize/detokenize round trip)")
     device = pick_device()
     tokenizer, model = load_models(device)
     vq_errors, vq_failures, vq_n = validate_on_vq_reconstruction(env, tokenizer, model, device,

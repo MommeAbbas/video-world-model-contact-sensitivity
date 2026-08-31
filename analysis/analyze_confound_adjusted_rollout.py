@@ -1,30 +1,28 @@
 """
 Confound-controlled analysis of the natural rollout-error experiment (paper
 Section "Contact-Conditioned Rollout Dynamics", second paragraph): controls
-for the ceiling/mean-reversion confound (windows that already grew error fast
-pre-event, or already sat at a high error level at t=0, mechanically have less
-room to keep growing afterward) and for the post-event motion/action
-confound (release coincides with a drop in object velocity and action
-magnitude).
+for the ceiling/mean-reversion confound (windows already growing error fast,
+or already at a high error level at t=0, mechanically have less room to
+grow further) and the post-event motion/action confound (release coincides
+with a drop in object velocity and action magnitude).
 
-Part A: ceiling/saturation hypothesis (slope_before vs slope_after
-         correlation, error_at_t0 vs slope_after, OLS controlling for
-         slope_before).
-Part B: episode-cluster bootstrap on the raw release/onset-vs-control
-         difference in slope_change (fixes pseudoreplication in a naive
-         event-wise bootstrap: multiple events come from the same episode).
-Part C: motion/action confound (velocity/action aligned plots + regression).
-         "Model 4" here -- slope_change ~ slope_before + release_dummy +
-         onset_dummy + mean_post_vel + mean_post_action -- is the adjusted
-         model reported in the paper; its point estimate is exact but its
-         printed p-value is a naive (non-clustered) OLS t-test. The
-         cluster-valid uncertainty for this same coefficient is computed
-         separately in bootstrap_confound_adjusted_effect.py.
-Part D: onset severity split (cheap diagnostic using already-logged object
-         velocity; not used in the paper's reported numbers).
+Part A: ceiling/saturation hypothesis (slope_before vs slope_after,
+        error_at_t0 vs slope_after, OLS controlling for slope_before).
+Part B: episode-cluster bootstrap on the release/onset-vs-control
+        difference in slope_change, fixing the pseudoreplication of a naive
+        event-wise bootstrap (multiple events share an episode).
+Part C: motion/action confound regression. "Model 4"
+        (slope_change ~ slope_before + release_dummy + onset_dummy +
+        mean_post_vel + mean_post_action) is the adjusted model reported in
+        the paper; its point estimate is exact, but its printed p-value is
+        a naive, non-clustered OLS t-test. The cluster-valid uncertainty
+        for this coefficient is computed separately in
+        bootstrap_confound_adjusted_effect.py.
+Part D: onset severity split, a diagnostic not used in the paper's reported
+        numbers.
 
-OLS is implemented by hand (closed-form, via numpy.linalg.lstsq + standard
-OLS SE formula).
+OLS is implemented by hand (closed-form, via lstsq and the standard OLS SE
+formula).
 """
 import json
 import os
@@ -62,9 +60,9 @@ def curve_stats(curve):
 
 
 def window_motion_stats(log, t_event, rel_lo=-5, rel_hi=6):
-    """Mean object velocity (cube) / action norm before (rel<0) and after
-    (rel>=0) the event, using the raw per-timestep logs (available for the
-    full 12-step window, not just the 10 predicted frames).
+    """Mean object velocity/action norm before and after the event, from the
+    raw per-timestep logs (the full 12-step window, not just the 10
+    predicted frames).
     """
     start = t_event + rel_lo
     end = t_event + rel_hi
@@ -99,8 +97,8 @@ def build_table(episodes, events, curves):
 
 
 def ols(y, X_cols, X_names):
-    """Closed-form OLS with an intercept. X_cols: list of 1D arrays (predictors,
-    NOT including intercept). Returns dict of coef/se/t/p per name incl 'intercept'.
+    """Closed-form OLS with an intercept. X_cols: predictor arrays, not
+    including the intercept column.
     """
     n = len(y)
     X = np.column_stack([np.ones(n)] + X_cols)
@@ -122,7 +120,7 @@ def ols(y, X_cols, X_names):
 
 
 def part_a(rows):
-    print("\n" + "=" * 70 + "\nPART A: ceiling / saturation hypothesis\n" + "=" * 70)
+    print("\nPart A: ceiling / saturation hypothesis")
     slope_before = np.array([r["slope_before"] for r in rows])
     slope_after = np.array([r["slope_after"] for r in rows])
     error_at_t0 = np.array([r["error_at_t0"] for r in rows])
@@ -192,7 +190,7 @@ def part_a(rows):
 
 
 def part_b(rows):
-    print("\n" + "=" * 70 + "\nPART B: episode-cluster bootstrap\n" + "=" * 70)
+    print("\nPart B: episode-cluster bootstrap")
     seeds = sorted(set(r["seed"] for r in rows))
     by_seed_type = {}
     for r in rows:
@@ -235,7 +233,7 @@ def part_b(rows):
 
 
 def part_c(episodes, events, rows):
-    print("\n" + "=" * 70 + "\nPART C: motion / action confound\n" + "=" * 70)
+    print("\nPart C: motion / action confound")
     rel_lo, rel_hi = -5, 6
     rel = np.arange(rel_lo, rel_hi + 1)
     aligned = {"onset": {"vel": [], "act": []}, "release": {"vel": [], "act": []}, "control": {"vel": [], "act": []}}
@@ -299,13 +297,13 @@ def part_c(episodes, events, rows):
 
 
 def part_d(episodes, events, curves):
-    print("\n" + "=" * 70 + "\nPART D: onset severity split\n" + "=" * 70)
+    print("\nPart D: onset severity split")
     onset_events = events["onset_events"]
     onset_curves = curves["onset"]
     severities = []
     for seed, t in onset_events:
         log = episodes[seed]
-        severities.append(log["obj_velocity"][t, 0])  # cube speed AT onset
+        severities.append(log["obj_velocity"][t, 0])  # cube speed at onset
     severities = np.array(severities)
     median = np.median(severities)
     low_mask = severities <= median
@@ -323,9 +321,9 @@ def part_d(episodes, events, curves):
 
     sb_low, sa_low, mean_low = stats_for(low_mask)
     sb_high, sa_high, mean_high = stats_for(high_mask)
-    print(f"LOW-impact onsets:  slope_before={sb_low.mean():.5f} slope_after={sa_low.mean():.5f} "
+    print(f"low-impact onsets:  slope_before={sb_low.mean():.5f} slope_after={sa_low.mean():.5f} "
           f"change={sa_low.mean()-sb_low.mean():+.5f}")
-    print(f"HIGH-impact onsets: slope_before={sb_high.mean():.5f} slope_after={sa_high.mean():.5f} "
+    print(f"high-impact onsets: slope_before={sb_high.mean():.5f} slope_after={sa_high.mean():.5f} "
           f"change={sa_high.mean()-sb_high.mean():+.5f}")
 
     t_stat, p_val = stats.ttest_ind(sa_high - sb_high, sa_low - sb_low, equal_var=False)

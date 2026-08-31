@@ -1,30 +1,15 @@
 """
-Faithful-geometry reconstruction of the VP2 benchmark's RoboSuite task used to
-fine-tune checkpoints/ivideogpt-vp2-robosuite-64-act-cond/, for use with a
-MODERN, macOS/Apple-Silicon-compatible robosuite + mujoco install.
+Reconstruction of the VP2 benchmark's RoboSuite pushing task
+(PushCenterMulti) that the iVideoGPT checkpoint was fine-tuned on, rebuilt on
+modern robosuite/mujoco. The original fork requires legacy free-mujoco-py and
+iGibson rendering, neither viable here (no Apple Silicon support).
 
-WHY THIS FILE EXISTS: the actual VP2 RoboSuite training data was produced by:
-  - task: a custom robosuite environment class "PushCenterMulti", pinned at
-    https://github.com/s-tian/robosuite @ 163e4d42866ecbb42c439fe0be4d5d52bb8320a1
-    (robosuite/environments/manipulation/push_center_multi.py)
-  - renderer: iGibson (see vp2/scripts/configs/env/robosuite.yaml: `renderer: igibson`),
-    a photorealistic PBR renderer wrapping MuJoCo -- NOT native robosuite/mujoco
-    rendering.
-That exact fork requires `free-mujoco-py==2.1.6` (legacy Cython bindings against
-MuJoCo 2.1), which has no practical Apple Silicon support, and the iGibson
-renderer is a separate, heavyweight PBR pipeline. This reconstruction
-deliberately does not attempt to reproduce either; the resulting appearance-
-domain shift (native flat-shaded rendering vs. iGibson's physically based
-renderer) is discussed in the paper's Limitations section.
-
-This class ports the parts of PushCenterMulti that are pure data (object
-sizes/densities/frictions, table size/offset, placement-sampler ranges, camera
-pose) verbatim from the pinned fork's source, and rebuilds them on modern
-robosuite (1.5.x) + native mujoco (3.3.7) rendering. Verbatim-ported constants
-are commented with their source line in the fork. This reproduces exact
-geometry, camera projection, and object scale; it does NOT reproduce iGibson's
-shading/lighting/textures (cosmetic only) or the exact legacy MuJoCo 2.1
-contact solver (irrelevant here since calibration never calls mj_step()).
+Object sizes/densities/frictions, table geometry, placement ranges, and
+camera pose are ported verbatim from the pinned fork
+(s-tian/robosuite @ 163e4d4, push_center_multi.py); source lines are noted
+inline. This reproduces exact geometry and camera projection but not
+iGibson's PBR shading, which is a known appearance-domain shift discussed in
+the paper's Limitations section.
 """
 import numpy as np
 
@@ -131,9 +116,8 @@ class PushCenterMultiLite(ManipulationEnv):
             camera_name="agentview_shift_2", pos=AGENTVIEW_SHIFT_2_POS, quat=AGENTVIEW_SHIFT_2_QUAT
         )
 
-        # Objects verbatim from push_center_multi.py:409-465 (materials/textures
-        # dropped -- that fork's PUSHCENTER_TEXTURES asset pack isn't available;
-        # using plain rgba colors instead, a cosmetic-only difference).
+        # Objects verbatim from push_center_multi.py:409-465, with plain rgba
+        # colors in place of the fork's unavailable texture pack.
         self.box_object = BoxObject(
             name="cube", size=[0.06, 0.06, 0.06], density=1000,
             rgba=[0.8, 0.1, 0.1, 1], friction=[0.7, 0.005, 0.0001],

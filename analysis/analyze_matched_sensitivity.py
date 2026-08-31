@@ -1,15 +1,11 @@
 """
 Primary analysis for the matched predictive-sensitivity experiment (paper
-Section "Causal Sensitivity Around Contact Transitions", Table 1): Model 1
-(contact_status + injection_hamming), Model 2 (+ image displacement, action
-magnitude, object velocity, object depth, gripper distance -- the covariate-
-adjusted robustness check), an episode-cluster bootstrap on Model 1's
-beta_contact, and a matched-pair divergence-difference analysis. Parameterized
-by treatment_label so the identical implementation serves both the onset and
-release experiments.
-
-Reads outputs/rq2_scaled_full.json (onset) or the release exploratory/
-confirmation/combined JSON files produced by the corresponding run_* scripts.
+Table 1): Model 1 (contact_status + injection_hamming), Model 2 (the
+covariate-adjusted robustness check, adding image displacement, action
+magnitude, object velocity/depth, gripper distance), an episode-cluster
+bootstrap on Model 1's beta_contact, and a matched-pair divergence-difference
+analysis. Parameterized by treatment_label so the same implementation
+serves both onset and release.
 """
 import json
 import os
@@ -50,10 +46,9 @@ def load(name="rq2_scaled_full.json"):
 
 
 def analyze(rows, label="", treatment_label="onset"):
-    # treatment_label generalizes the analysis so this identical, unmodified
-    # implementation runs on "release"-labeled rows too; default value
-    # reproduces the original onset-only behavior exactly.
-    print("\n" + "=" * 70 + f"\nANALYSIS: {label} (n_events={len(rows)})\n" + "=" * 70)
+    # treatment_label generalizes this to run on "release"-labeled rows too;
+    # the default reproduces the onset-only behavior.
+    print(f"\nAnalysis: {label} (n_events={len(rows)})")
 
     contact = np.array([1.0 if r["event_type"] == treatment_label else 0.0 for r in rows])
     hamming = np.array([r["injection_hamming"] for r in rows])
@@ -89,8 +84,7 @@ def analyze(rows, label="", treatment_label="onset"):
         print(f"  {k:26s} beta={v['beta']:+.4f} se={v['se']:.4f} 95%CI=[{v['ci95'][0]:+.4f},{v['ci95'][1]:+.4f}] p={v['p']:.4f}")
     print(f"  R^2={m2['r2']:.3f}")
 
-    # Episode-cluster bootstrap on beta_contact (Model 1), clustering by the
-    # TREATMENT episode of each pair -- the primary non-independence source.
+    # Cluster by the treatment episode of each pair, the primary non-independence source.
     print(f"\nEpisode-cluster bootstrap on beta_contact (Model 1), clustering by pair's {treatment_label} episode:")
     onset_rows = [r for r in rows if r["event_type"] == treatment_label]
     pair_to_onset_seed = {r["pair_id"]: r["seed"] for r in onset_rows}
@@ -192,9 +186,9 @@ def analyze(rows, label="", treatment_label="onset"):
 def main():
     if os.path.exists(os.path.join(OUT_DIR, "rq2_scaled_interim20.json")):
         rows20 = load("rq2_scaled_interim20.json")
-        analyze(rows20, label="INTERIM (first 20 pairs)")
+        analyze(rows20, label="interim (first 20 pairs)")
     rows_full = load("rq2_scaled_full.json")
-    result = analyze(rows_full, label="FULL")
+    result = analyze(rows_full, label="full")
     with open(os.path.join(OUT_DIR, "rq2_scaled_analysis_results.json"), "w") as f:
         json.dump(result, f, indent=2)
 

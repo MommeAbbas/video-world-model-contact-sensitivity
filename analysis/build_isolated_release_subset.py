@@ -1,21 +1,11 @@
 """
 Isolated-release-subset construction (paper Section "Causal Sensitivity
-Around Contact Transitions": "we restrict the analysis to windows containing
-only the target transition"). Two steps, run in sequence:
-
-Step 1 (isolated_release_events): extract the (seed, t_release) identifiers
-of release events whose [tau-5, tau+6] window is (a) in bounds and (b)
-contains exactly one cube onset/release transition -- the target release
-itself and no other.
-
-Step 2 (filter_to_isolated_pairs): join those identifiers to the existing,
-already-computed release results (rq2_release_exploratory_full.json /
-rq2_release_confirmation_full.json) at the pair level, retaining each
-isolated event's original matched control exactly as already computed -- no
-rematching, no new inference, no new pair IDs.
-
-Neither step reruns model inference or touches the event-centered temporal
-profile experiment.
+Around Contact Transitions": restricting to windows containing only the
+target transition). Two steps: isolated_release_events extracts (seed,
+t_release) identifiers whose [tau-5, tau+6] window is in bounds and contains
+exactly one cube transition; filter_to_isolated_pairs joins those to the
+existing release results at the pair level, keeping each event's original
+matched control unchanged. No rematching, no new inference, no new pair IDs.
 """
 import json
 import os
@@ -28,7 +18,7 @@ from src import episode_generation as ep
 OUT_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "outputs")
 
 
-# --- Step 1: identify isolated release events ---
+# Step 1: identify isolated release events.
 
 def all_transitions(log):
     onsets, releases = ep.find_contact_events(log["contact_per_object"], obj_index=0)
@@ -55,7 +45,7 @@ def isolated_release_events(episodes):
     return isolated
 
 
-# --- Step 2: join isolated identifiers to existing release results ---
+# Step 2: join isolated identifiers to existing release results.
 
 def load(name):
     with open(os.path.join(OUT_DIR, name)) as f:
@@ -74,7 +64,7 @@ def filter_to_isolated_pairs(rows, isolated_ids):
     matched_pair_ids = {r["pair_id"] for r in matched_release}
     # sanity: exactly one release row per isolated (seed,t) should match
     assert len(matched_release) == len(iso_set), (
-        f"join mismatch: {len(matched_release)} release rows matched vs {len(iso_set)} requested ids -- "
+        f"join mismatch: {len(matched_release)} release rows matched vs {len(iso_set)} requested ids, "
         f"matched=({[(r['seed'], r['t']) for r in matched_release]}) requested=({sorted(iso_set)})")
     kept = [r for r in rows if r["pair_id"] in matched_pair_ids]
     return kept, matched_pair_ids
@@ -82,7 +72,7 @@ def filter_to_isolated_pairs(rows, isolated_ids):
 
 def print_audit_table(rows, batch_label):
     pair_ids = sorted(set(r["pair_id"] for r in rows))
-    print(f"\n--- Retained-pair audit table: {batch_label} ---")
+    print(f"\nRetained-pair audit table: {batch_label}")
     header = (f"{'pair_id':>7s} {'rel_seed':>8s} {'rel_t':>6s} {'ctrl_seed':>9s} {'ctrl_t':>7s} "
               f"{'match_dist':>10s} {'ham_rel':>7s} {'ham_ctrl':>8s} {'D_rel':>7s} {'D_ctrl':>7s} {'DeltaD':>8s}")
     print(header)
@@ -106,7 +96,6 @@ def print_audit_table(rows, batch_label):
 
 
 def main():
-    # --- Step 1 ---
     with open(os.path.join(OUT_DIR, "pilot_episodes.pkl"), "rb") as f:
         exploratory = pickle.load(f)
     with open(os.path.join(OUT_DIR, "pilot_episodes_confirmation.pkl"), "rb") as f:
@@ -116,13 +105,13 @@ def main():
     iso_conf = isolated_release_events(confirmation)
 
     print("Isolated (transition-clean) release events, window=[tau-5,tau+6]:")
-    print(f"\nEXPLORATORY (seeds 0-9): {len(iso_exp)} isolated release events")
+    print(f"\nexploratory (seeds 0-9): {len(iso_exp)} isolated release events")
     for seed, t in iso_exp:
         print(f"  (seed={seed}, t={t})")
-    print(f"\nCONFIRMATION (seeds 100-109): {len(iso_conf)} isolated release events")
+    print(f"\nconfirmation (seeds 100-109): {len(iso_conf)} isolated release events")
     for seed, t in iso_conf:
         print(f"  (seed={seed}, t={t})")
-    print(f"\nCOMBINED: {len(iso_exp) + len(iso_conf)} isolated release events")
+    print(f"\ncombined: {len(iso_exp) + len(iso_conf)} isolated release events")
 
     ids = {
         "exploratory": [{"seed": int(s), "t": int(t)} for s, t in iso_exp],
@@ -132,22 +121,19 @@ def main():
         json.dump(ids, f, indent=2)
     print("\nSaved identifiers to outputs/rq2_isolated_release_ids.json")
 
-    # --- Step 2 ---
     exp_full = load("rq2_release_exploratory_full.json")
     conf_full = load("rq2_release_confirmation_full.json")
 
     exp_kept, exp_pids = filter_to_isolated_pairs(exp_full, ids["exploratory"])
     conf_kept, conf_pids = filter_to_isolated_pairs(conf_full, ids["confirmation"])
 
-    print(f"EXPLORATORY: {len(exp_pids)} isolated pairs retained (of {len(set(r['pair_id'] for r in exp_full))} total)")
-    print(f"CONFIRMATION: {len(conf_pids)} isolated pairs retained (of {len(set(r['pair_id'] for r in conf_full))} total)")
+    print(f"exploratory: {len(exp_pids)} isolated pairs retained (of {len(set(r['pair_id'] for r in exp_full))} total)")
+    print(f"confirmation: {len(conf_pids)} isolated pairs retained (of {len(set(r['pair_id'] for r in conf_full))} total)")
 
-    print_audit_table(exp_kept, "EXPLORATORY isolated subset")
-    print_audit_table(conf_kept, "CONFIRMATION isolated subset")
+    print_audit_table(exp_kept, "exploratory isolated subset")
+    print_audit_table(conf_kept, "confirmation isolated subset")
 
-    # Combined: re-index pair_id to avoid collision (exploratory pair_ids and
-    # confirmation pair_ids both start near 0) -- provenance preserved via
-    # original seed/t fields, which are untouched.
+    # Re-index confirmation pair_id to avoid collision with exploratory pair_ids.
     import copy
     max_pid = max(r["pair_id"] for r in exp_kept)
     combined = copy.deepcopy(exp_kept)

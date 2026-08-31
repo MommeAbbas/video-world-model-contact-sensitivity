@@ -1,18 +1,12 @@
 """
-Episode generation and per-timestep logging on the PushCenterMultiLite
-environment: a scripted multi-segment approach-push-retract policy plus
-contact/state logging, used to produce every episode batch (exploratory
-seeds 0-9, confirmation seeds 100-109).
+Episode generation and per-timestep logging on PushCenterMultiLite: a
+scripted policy of repeated approach-push-retract cycles against the cube,
+with randomized push direction and approach offset per cycle, so one episode
+contains multiple separate contact segments rather than one sustained
+contact. Used to produce every episode batch.
 
-Scripted policy: per episode, run several (default 3) independent
-approach -> push -> retract cycles targeting the cube object, each with a
-randomized push direction and randomized approach offset, so one episode
-naturally contains multiple separate contact interaction segments rather than
-one long sustained contact.
-
-Uses OSC_POSITION proportional control: action_xyz = clip((target-eef)/0.05, -1, 1).
-Gripper action held closed (constant) throughout -- this is a pushing task,
-not grasping.
+OSC_POSITION proportional control: action_xyz = clip((target-eef)/0.05, -1, 1).
+Gripper held closed throughout (pushing, not grasping).
 """
 import numpy as np
 
@@ -31,11 +25,7 @@ def object_contact_geoms(env):
 
 
 def classify_contacts(env, grip_geoms, obj_geoms):
-    """Returns dict: obj_index -> True/False (gripper touching that object
-    this timestep), by scanning sim.data.contact[0:ncon] and resolving geom
-    ids to names via sim.model.geom_id2name -- per-object, not a single
-    global contact boolean.
-    """
+    """Per-object gripper contact this timestep: dict obj_index -> bool."""
     result = {i: False for i in obj_geoms}
     ncon = env.sim.data.ncon
     for i in range(ncon):
@@ -65,23 +55,11 @@ def proportional_action(target_xyz, current_xyz, gripper_closed=True):
 
 def run_episode(seed, n_cycles=3, hover_h=0.12, approach_steps=6, push_steps=5, retract_steps=4, rng=None,
                  obj_index=OBJ_INDEX):
-    """Runs one episode with n_cycles approach-push-retract segments against
-    the manipulated object (default: the cube, OBJ_INDEX=0; pass obj_index to
-    target a different object, e.g. 3="ball" -- see push_center_multi_lite.py's
-    self.objects list order), randomized push direction/approach offset per
-    cycle and randomized initial object placement (via env.reset()). Logs
-    everything the task asks for at every timestep, for ALL objects
-    (contact_per_object, obj_pos, etc. are unaffected by obj_index -- only
-    which object the scripted policy chases changes).
-
-    obj_index is the ONLY behavioral change from the frozen cube pipeline:
-    every geometric constant below (hover height, approach/push offsets,
-    descend height) is applied identically regardless of which object's
-    position is substituted in. Default value reproduces the original cube
-    behavior exactly.
-
-    Returns a dict of per-timestep arrays/lists ready to be sliced into
-    windows for the natural rollout-error analysis.
+    """Runs one episode of n_cycles approach-push-retract segments against
+    obj_index (default the cube), with randomized push direction/approach
+    offset per cycle and randomized initial placement via env.reset().
+    Per-timestep state is logged for all objects regardless of obj_index.
+    Returns a dict of per-timestep arrays.
     """
     rng = rng or np.random.default_rng(seed)
     env = lib.build_env(seed=seed)
@@ -157,10 +135,8 @@ def run_episode(seed, n_cycles=3, hover_h=0.12, approach_steps=6, push_steps=5, 
 
 
 def find_contact_events(contact_per_object, obj_index=0):
-    """contact_per_object: (T, n_objects) bool array. Returns onset and
-    release timestep indices for obj_index, where an "event" is a
-    False->True (onset) or True->False (release) transition -- sustained
-    contact across consecutive timesteps is one event, not many.
+    """Onset (False->True) and release (True->False) transition timesteps
+    for obj_index; sustained contact is one event, not many.
     """
     col = contact_per_object[:, obj_index].astype(bool)
     onsets = [t for t in range(1, len(col)) if col[t] and not col[t - 1]]

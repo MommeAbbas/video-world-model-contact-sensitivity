@@ -1,15 +1,12 @@
 """
 Matched predictive-sensitivity experiment, onset, independent confirmation
-batch (paper Section "Causal Sensitivity Around Contact Transitions", Table 1:
-Onset / Confirmation). Generates 10 genuinely new episodes (seeds 100-109,
-disjoint from the exploratory seeds 0-9) and runs the identical pipeline used
-for the exploratory batch (src/episode_generation.py, src/matched_sensitivity.py) --
-this batch was not inspected before the exploratory analysis was complete, per
-the paper's pre-registered independent-replication rule.
+batch (paper Table 1: Onset / Confirmation). Generates 10 new episodes
+(seeds 100-109, disjoint from exploratory 0-9) and runs the identical
+pipeline as the exploratory batch; not inspected before the exploratory
+analysis was complete, per the pre-registered independent-replication rule.
 
-Does not print or compute any aggregate contact-effect estimate during
-collection -- only raw per-event numbers. All regression/bootstrap analysis
-happens afterward, in analysis/analyze_matched_sensitivity.py.
+Collection only prints raw per-event numbers; regression/bootstrap analysis
+happens separately in analysis/analyze_matched_sensitivity.py.
 """
 import json
 import os
@@ -33,9 +30,8 @@ def main():
     print(f"Using device: {device}")
     tokenizer, model = load_models(device)
 
-    print(f"\nGenerating {len(CONFIRMATION_SEEDS)} NEW episodes "
-          f"(seeds {CONFIRMATION_SEEDS[0]}-{CONFIRMATION_SEEDS[-1]}), n_cycles=3, "
-          f"via src/episode_generation.py::run_episode (unchanged)...")
+    print(f"\nGenerating {len(CONFIRMATION_SEEDS)} new episodes "
+          f"(seeds {CONFIRMATION_SEEDS[0]}-{CONFIRMATION_SEEDS[-1]})...")
     episodes = {}
     for seed in CONFIRMATION_SEEDS:
         log = ep.run_episode(seed=seed, n_cycles=3)
@@ -59,8 +55,7 @@ def main():
     print(f"Control candidate pool size: {len(control_pool)}")
 
     if len(onset_events) == 0:
-        print("NO VALID ONSET EVENTS in the confirmation batch -- reporting transparently, "
-              "not altering selection rules to compensate. Stopping here.")
+        print("No valid onset events in the confirmation batch; stopping here.")
         with open(os.path.join(OUT_DIR, "rq2_confirmation_full.json"), "w") as f:
             json.dump([], f)
         return
@@ -91,8 +86,7 @@ def main():
         json.dump(results, f, indent=2)
     print(f"\nSaved {len(results)} event records ({len(onset_events)} pairs) to "
           f"outputs/rq2_confirmation_full.json")
-    print("\nCollection complete. No contact-effect estimate computed during this run -- "
-          "run analysis/analyze_matched_sensitivity.py separately for analysis.")
+    print("\nCollection complete; run analysis/analyze_matched_sensitivity.py for analysis.")
 
 
 if __name__ == "__main__":

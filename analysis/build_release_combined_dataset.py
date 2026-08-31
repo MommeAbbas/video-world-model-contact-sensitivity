@@ -1,14 +1,11 @@
 """
-Combines the release exploratory and confirmation batches into a single
-dataset (outputs/rq2_release_combined_full.json), re-indexing confirmation
-pair_ids to avoid collision with exploratory pair_ids (both start near 0).
-Provenance is preserved via the original seed/t fields, which are untouched.
-This is the "combined" dataset used by analyze_matched_sensitivity.py and
-bootstrap_covariate_adjusted_effect.py for the paper's combined release
-statistics (Table 1, n=98 events / 49 pairs / 20 episodes).
-
-No rematching, no new inference -- a pure join/re-index of two already-
-computed result files.
+Combines the release exploratory and confirmation batches into
+outputs/rq2_release_combined_full.json, re-indexing confirmation pair_ids
+to avoid collision with exploratory pair_ids. Used by
+analyze_matched_sensitivity.py and bootstrap_covariate_adjusted_effect.py
+for the paper's combined release statistics (Table 1, n=98/49 pairs/20
+episodes). Pure join/re-index of two already-computed result files; no
+rematching or new inference.
 """
 import copy
 import json

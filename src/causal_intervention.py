@@ -1,19 +1,15 @@
 """
-Core causal-splice intervention primitives: the fixed context/action/future-
-frame window used to anchor every intervention (build_segment), the token
-prefix construction that splices a clean simulator-rendered intervention frame
-into an otherwise real context (build_prefix_tokens), and the downstream
-token-Hamming divergence measure between two continuations (divergence_curve)
--- the D_i measure described in the paper's Method section.
+Core causal-splice primitives: the fixed context/action/future-frame window
+anchoring every intervention (build_segment), the token prefix that splices
+a simulator-rendered frame into an otherwise real context
+(build_prefix_tokens), and the downstream token-Hamming divergence between
+two continuations (divergence_curve, the D_i measure in the paper's Method
+section).
 
-build_segment defines the fixed window layout (segment_length=12, context=2,
-matching the checkpoint): segment_start = t_event - 5, frames =
-[segment_start, ..., segment_start+11] (12 absolute timesteps), context =
-frames[0], frames[1]. It also applies the one-step action shift needed because
-episode logs store action[t] as the action APPLIED to reach frame t from frame
-t-1 (a "look-back" convention from env.step() bookkeeping), while
-HeadModelWithAction's generate()/forward() convention needs action[t] = the
-action taken FROM frame t (a "look-ahead" convention).
+build_segment also applies a one-step action shift: episode logs store
+action[t] as the action applied to reach frame t (look-back), while
+HeadModelWithAction expects action[t] as the action taken from frame t
+(look-ahead).
 """
 import torch
 
@@ -24,8 +20,8 @@ import numpy as np
 
 
 def build_segment(log, t_event):
-    """Returns (frames_chw_2x3x64x64_context, full_action_seq_12x4, gt_frames_10x3x64x64)
-    for the fixed window anchored at t_event, or None if out of range.
+    """(context (2,3,64,64), action_seq (12,4), gt_future (10,3,64,64)) for
+    the fixed window anchored at t_event, or None if out of range.
     """
     start = t_event - 5
     end = t_event + 6  # inclusive, 12 absolute timesteps: start..end
@@ -42,24 +38,19 @@ def build_segment(log, t_event):
 
 @torch.no_grad()
 def build_prefix_tokens(tokenizer, model, context_pixel_values, frame_chw, device):
-    """context_pixel_values: (1,2,3,64,64) real ground-truth context.
-    frame_chw: the (clean, simulator-rendered) intervention frame.
-    Returns a (1, 530) token tensor: [513 context tokens][sdf][16 dyna] --
-    exactly the layout sl.generate_frames expects to continue from.
+    """context_pixel_values: (1,2,3,64,64) real context. frame_chw: the
+    simulator-rendered intervention frame. Returns a (1,530) token tensor
+    [513 context][sdf][16 dyna], the layout sl.generate_frames expects.
     """
     dyna = sl.retokenize_single_frame(tokenizer, context_pixel_values, frame_chw.unsqueeze(0).to(device),
                                         CONTEXT_LENGTH)
-    # tokenizer.tokenize requires future_length>0 -- reuse the already-tokenized
-    # context prefix by tokenizing context+frame_chw as a 1-future-frame clip.
+    # tokenize() requires future_length>0, so tokenize context+frame_chw as
+    # a 1-future-frame clip to get the context tokens.
     clip = torch.cat([context_pixel_values.to(device), frame_chw.unsqueeze(0).unsqueeze(0).to(device)], dim=1)
     tokens, _ = tokenizer.tokenize(clip, CONTEXT_LENGTH)
     context_tokens = tokens[:, :CONTEXT_LENGTH * (256 + 1) - 1]  # 513
     sdf_token = torch.full((1, 1), model.token_for_sdf, dtype=context_tokens.dtype, device=device)
-    # [context(513)][sdf frame0][dyna frame0 (16)][sdf frame1] -- the trailing
-    # sdf marks the boundary for the NEXT frame, matching HeadModelWithAction's
-    # own loop convention (action_model.py: dyna tokens are always followed by
-    # the next frame's sdf token before the sequence is handed onward), which
-    # is what sl.generate_frames(start_frame=1, ...) expects.
+    # Trailing sdf marks the next frame's boundary, matching generate_frames(start_frame=1, ...).
     prefix = torch.cat([context_tokens, sdf_token, dyna.to(context_tokens.dtype), sdf_token], dim=1)
     assert prefix.shape[1] == model.prelude_tokens_num + 1 + 1 * (model.tokens_num_per_dyna + 1)
     return prefix

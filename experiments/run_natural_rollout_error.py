@@ -1,25 +1,17 @@
 """
 Natural rollout-error experiment (paper Section "Contact-Conditioned Rollout
 Dynamics"): for each valid contact onset/release event, generate a real
-iVideoGPT rollout from a fixed 2-context-frame window anchored 5 steps before
-the event, compare each of the 10 predicted future frames against the actual
-simulator ground-truth frame at that timestep, and align the resulting error
-curve to the event timestep. Also generates matched non-contact (free-motion)
-windows at the same horizon structure as a control.
+iVideoGPT rollout from a fixed context window anchored 5 steps before the
+event, compare each predicted future frame against the ground-truth
+simulator frame, and align the resulting error curve to the event timestep.
+Also generates matched free-motion control windows.
 
-Window layout (segment_length=12, context=2, matches the checkpoint exactly):
+Window layout (segment_length=12, context=2):
   segment_start = t_event - 5
-  frames  = [segment_start, ..., segment_start+11]   (12 absolute timesteps)
+  frames  = [segment_start, ..., segment_start+11]
   context = frames[0], frames[1]
-  future  = frames[2..11]  -> 10 predicted frames, relative time k-3 for k=0..9
-  so t_event sits at relative time 0 (segment position 5, future index 3).
-
-Action shift: episode logs store action[t] = the action applied to reach
-frame t from frame t-1 (a "look-back" convention from env.step() bookkeeping).
-The model's HeadModelWithAction.generate()/forward() convention is
-action[t] = action taken FROM frame t (a "look-ahead" convention); the
-per-segment action fed to the model is a +1 shift of the logged action array
-(see src/causal_intervention.py::build_segment).
+  future  = frames[2..11], relative time k-3 for k=0..9
+  so t_event sits at relative time 0.
 
 Error metric: mean absolute pixel error (0-1 scale) between generated and
 ground-truth frame, per future position.
@@ -46,10 +38,8 @@ OUT_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 
 @torch.no_grad()
 def rollout_and_score(tokenizer, model, device, full_segment, model_actions):
-    # Tokenize the FULL 12-frame segment (context + ground-truth future),
-    # then keep only the context tokens as gen_input -- tokenizer.tokenize()
-    # requires future_length > 0 internally (compressive_vq_model.py's
-    # cond_encoder call), so we can't tokenize context frames alone.
+    # tokenize() requires future_length > 0 internally, so we tokenize the
+    # full 12-frame segment and keep only the context tokens as gen_input.
     full_t = torch.from_numpy(full_segment).unsqueeze(0).to(device)  # 1,12,3,64,64
     action_t = torch.from_numpy(model_actions).unsqueeze(0).to(device)  # 1,12,4
 
@@ -70,11 +60,8 @@ def per_frame_mae(pred, gt):
 
 
 def find_matched_controls(all_logs, n_needed, exclude_events, rng):
-    """Finds windows with the same 12-step structure where NO contact
-    transition (onset or release, for the cube) occurs anywhere within
-    [t-5, t+6], at a similar rollout horizon (t not too close to episode
-    start/end) -- a free-motion control matched in structure, not in the
-    same episode/other-object identity.
+    """Windows with the same 12-step structure and no cube contact
+    transition anywhere within [t-5, t+6].
     """
     candidates = []
     for seed, log in all_logs.items():
@@ -130,11 +117,11 @@ def main():
             print(f"  [{label} {i+1}/{len(events)}] seed={seed} t={t} err={np.round(err,4).tolist()}")
         return np.array(curves)  # (n_events, 10)
 
-    print("\nRunning rollouts for ONSET events...")
+    print("\nRunning rollouts for onset events...")
     onset_curves = run_batch(onset_events, "onset")
-    print("\nRunning rollouts for RELEASE events...")
+    print("\nRunning rollouts for release events...")
     release_curves = run_batch(release_events, "release")
-    print("\nRunning rollouts for CONTROL (non-contact) windows...")
+    print("\nRunning rollouts for control (non-contact) windows...")
     control_curves = run_batch(control_events, "control")
 
     np.savez(os.path.join(OUT_DIR, "rq1_pilot_curves.npz"),

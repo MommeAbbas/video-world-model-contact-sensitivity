@@ -1,12 +1,9 @@
 """
-Offset-parameterized intervention for the event-centered temporal sensitivity
-sweep (paper Section "Temporal Structure of Predictive Sensitivity"):
-render_clean_pair_at and adaptive_epsilon_search_at are the same calibrated
-instrument as matched_sensitivity.render_clean_pair / adaptive_epsilon_search,
-except the intervention timestep t_i is passed in directly instead of being
-computed as t_event-3, so the same instrument can be swept across
-Delta_t in {-3,...,+3}. EPSILON_CANDIDATES_MM and TARGET_BAND are imported
-unchanged, not redefined.
+Offset-parameterized version of the calibrated intervention instrument
+(paper Section "Temporal Structure of Predictive Sensitivity"): same as
+matched_sensitivity.render_clean_pair/adaptive_epsilon_search, except the
+intervention timestep t_i is passed in directly rather than computed as
+t_event-3, so the instrument can be swept across Delta_t in {-3,...,+3}.
 """
 import numpy as np
 
@@ -16,10 +13,7 @@ from robosuite.utils.binding_utils import MjSimState
 
 
 def render_clean_pair_at(env, log, t_i, epsilon_mm, direction="lateral_x", obj_index=0):
-    """obj_index: which env.objects[] entry to displace (default 0 = the cube
-    studied in the paper). The displacement magnitude, direction convention,
-    state-restore procedure, and render/tokenize path are identical regardless
-    of obj_index."""
+    """obj_index selects which env.objects[] entry to displace (default 0, the cube)."""
     qpos, qvel, tm = log["qpos"][t_i], log["qvel"][t_i], log["time"][t_i]
 
     env.sim.set_state(MjSimState(time=tm, qpos=qpos.copy(), qvel=qvel.copy()))

@@ -1,14 +1,8 @@
 """
-Loads the pretrained iVideoGPT checkpoint (tokenizer + action-conditioned
-transformer) and picks a compute device. This is the shared entry point every
-experiment/analysis script in this repository uses to obtain a ready-to-run
-model; it does not run any experiment itself.
-
-The checkpoint-loading and generation code paths here call directly into the
-unmodified upstream iVideoGPT implementation (third_party/iVideoGPT); see
-validation/validate_checkpoint_loading.py for the standalone sanity check that
-this loading path and the model's generate()/detokenize() produce finite,
-well-shaped output before any perturbation experiment is run.
+Loads the pretrained iVideoGPT checkpoint (tokenizer, action-conditioned
+transformer) and picks a compute device. Shared by every experiment/analysis
+script; see validation/validate_checkpoint_loading.py for the standalone
+sanity check of this loading path.
 """
 import os
 import sys

@@ -1,11 +1,8 @@
 """
-Benchmarks deterministic continuation runtime for the real iVideoGPT checkpoint
-on this machine, for 1/2/4/6/8 future frames, using src/causal_splice.py's
-generate_frames (the same reimplementation used and validated in
-validate_causal_splice.py). Reports wall-clock time and per-frame cost, and
-estimates rough compute for a ~30-50 contact-event experiment. Does NOT run
-that experiment -- estimate only. Requires the same real demonstration clip
-as validate_checkpoint_loading.py.
+Benchmarks deterministic continuation runtime for 1/2/4/6/8 future frames
+using src/causal_splice.py's generate_frames, and estimates rough compute
+for a ~30-50 contact-event experiment (estimate only, does not run it).
+Requires the same real demonstration clip as validate_checkpoint_loading.py.
 """
 import json
 import os
@@ -66,9 +63,8 @@ def main():
     print(f"  {n_events} events x {n_conditions} conditions x {n_epsilons} epsilons "
           f"x {frames_per_continuation} continuation frames = {total_frame_generations} frame-generations")
     print(f"  estimated wall-clock: {est_seconds/60:.1f} min ({est_seconds/3600:.2f} hours)")
-    print("  NOTE: batching multiple trials together (model.generate already supports a batch dim)"
-          " would reduce this substantially since MPS/CPU cost is not linear in batch size for a"
-          " single forward pass; this estimate is the conservative batch=1 serial case.")
+    print("  Note: batching trials together would reduce this substantially, since MPS/CPU cost"
+          " is not linear in batch size; this estimate is the conservative batch=1 serial case.")
 
     out_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "outputs", "timing_benchmark.json")
     with open(out_path, "w") as f:

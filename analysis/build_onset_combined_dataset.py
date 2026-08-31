@@ -1,16 +1,11 @@
 """
-Combines the onset exploratory and confirmation batches into a single
-dataset (outputs/rq2_combined_full.json), re-indexing confirmation pair_ids
-to avoid collision with exploratory pair_ids (both start near 0). Provenance
-is preserved via the original seed/t fields, which are untouched. This is
-the "combined" dataset behind the paper's Table 1 onset-combined row
-(64 pairs, 128 events, 20 episodes): Model 1 beta_contact ~= -0.95, 95%
-cluster CI ~= [-1.74, -0.19]; matched-pair Delta D ~= -0.83, cluster CI
-~= [-1.78, +0.03].
-
-No rematching, no new inference -- a pure join/re-index of two already-
-computed result files, mirroring build_release_combined_dataset.py's
-procedure for the release experiment.
+Combines the onset exploratory and confirmation batches into
+outputs/rq2_combined_full.json, re-indexing confirmation pair_ids to avoid
+collision with exploratory pair_ids. This is the dataset behind the paper's
+Table 1 onset-combined row (64 pairs, 128 events, 20 episodes): Model 1
+beta_contact ~= -0.95, 95% cluster CI ~= [-1.74, -0.19]; matched-pair
+Delta D ~= -0.83, cluster CI ~= [-1.78, +0.03]. Pure join/re-index of two
+already-computed result files, mirroring build_release_combined_dataset.py.
 """
 import copy
 import json

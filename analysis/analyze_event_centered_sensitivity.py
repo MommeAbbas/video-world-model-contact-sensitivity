@@ -6,7 +6,7 @@ C_onset/C_release, and the injection-Hamming diagnostic, all with
 episode-cluster bootstrap uncertainty (cluster = episode seed).
 
 The three PNGs saved here are quick diagnostic plots, not the paper's
-Figure 2 -- see figures/plot_paper_figures.py for the final panel figure.
+Figure 2; see figures/plot_paper_figures.py for the final panel figure.
 """
 import json
 import os
@@ -107,14 +107,14 @@ def main():
     hammings = {et: hamming_diagnostic(rows, et) for et in ["onset", "release"]}
 
     for et in ["onset", "release"]:
-        print(f"\n=== S_{et}(Delta_t) ===")
+        print(f"\nS_{et}(Delta_t):")
         for dt in OFFSETS:
             p = profiles[et][dt]
             print(f"  dt={dt:+d}: mean={p['mean']:.3f}  CI=[{p['ci_lo']:.3f},{p['ci_hi']:.3f}]  "
                   f"n_events={p['n_events']} n_episodes={p['n_episodes']}")
 
     for et in ["onset", "release"]:
-        print(f"\n=== C_{et}(Delta_t) = D(dt) - D(0), within-event ===")
+        print(f"\nC_{et}(Delta_t) = D(dt) - D(0), within-event:")
         for dt in OFFSETS:
             if dt == 0:
                 continue
@@ -123,7 +123,7 @@ def main():
                   f"n_events={c['n_events']} n_episodes={c['n_episodes']}")
 
     for et in ["onset", "release"]:
-        print(f"\n=== injection_hamming vs Delta_t ({et}) ===")
+        print(f"\ninjection_hamming vs Delta_t ({et}):")
         for dt in OFFSETS:
             h = hammings[et][dt]
             print(f"  dt={dt:+d}: mean_hamming={h['mean']:.2f} (n={h['n']})")

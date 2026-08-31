@@ -1,14 +1,11 @@
 """
-Checkpoint sanity check: load the pretrained iVideoGPT checkpoint and run one
-normal (unmodified) generation pass on a real RoboSuite clip, confirming the
-architecture, checkpoint, and local device (MPS or CPU) work together cleanly
-(no NaN/Inf) before any perturbation experiment is run.
+Checkpoint sanity check: load the pretrained iVideoGPT checkpoint and run
+one normal generation pass on a real RoboSuite clip, confirming the
+architecture, checkpoint, and device work together with no NaN/Inf. Not
+part of the reproduction pipeline for any reported result.
 
-Requires a real RoboSuite action-conditioned demonstration clip, which is not
-part of this repository (see README "Environment / data generation"). Point
-DEMO_NPZ at any clip with the same (observation, action) layout as the
-original VP2/RoboSuite pushing task; this check is a one-time sanity check,
-not part of the reproduction pipeline for any reported paper result.
+Requires a real RoboSuite demonstration clip (not included in this repo);
+point DEMO_NPZ at any clip with the same (observation, action) layout.
 """
 import os
 import sys
@@ -25,10 +22,9 @@ DEMO_NPZ = os.path.join(REPO_ROOT, "demo_data", "door-lock", "20240515T053942_2_
 
 
 def load_real_robosuite_clip(segment_length=SEGMENT_LENGTH, resolution=RESOLUTION, start=0):
-    """mbrl/demonstrations/*.npz store 'observation' as (T, 9, H, W) frame-stacked
-    uint8 (3 stacked RGB frames per timestep; channels [6:9] are the current frame,
-    verified by exact pixel match against the previous timestep's [3:6]/[0:3] slices).
-    'action' is (T, 4) float32 -- real robosuite delta-pose/gripper actions.
+    """'observation' is (T,9,H,W) frame-stacked uint8 (3 stacked RGB frames
+    per timestep; channels [6:9] are the current frame). 'action' is
+    (T,4) float32 robosuite delta-pose/gripper actions.
     """
     d = np.load(DEMO_NPZ, allow_pickle=True)
     obs = d["observation"]  # (T, 9, H, W) uint8
@@ -99,11 +95,11 @@ def main():
 
     print()
     if ok:
-        print("RESULT: PASS -- pretrained checkpoint loads, runs generate(), "
-              f"and detokenize() cleanly on device={device} with no NaN/Inf.")
+        print(f"Result: pass. Checkpoint loads and runs generate()/detokenize() cleanly "
+              f"on device={device} with no NaN/Inf.")
     else:
-        print("RESULT: FAILURE -- NaN/Inf detected somewhere in the pipeline on "
-              f"device={device}. See per-tensor stats above.")
+        print(f"Result: fail. NaN/Inf detected in the pipeline on device={device}; "
+              f"see per-tensor stats above.")
 
 
 if __name__ == "__main__":

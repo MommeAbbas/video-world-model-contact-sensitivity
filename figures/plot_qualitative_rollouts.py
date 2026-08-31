@@ -1,23 +1,18 @@
 """
-Qualitative rollout figures (paper Section "Qualitative and Physical
-Interpretation", Figure 3): large decoded A/B frames with a localized
-difference overlay, built only from the already objectively-selected,
-already exactly-reconstructed frame arrays saved by
-analysis/select_qualitative_examples.py. No new example selection, no new
-model inference, no metric changes, no new tracker/statistical analysis.
+Qualitative rollout figures (paper Figure 3): large decoded A/B frames with
+a localized difference overlay, built only from the frame arrays saved by
+analysis/select_qualitative_examples.py. No new example selection, model
+inference, metric, or analysis.
 
-One frozen difference-overlay rule, applied identically to every panel in
-both figures (never rescaled per-panel): raw mean-abs-RGB difference between
-the A and B decoded frame, thresholded at DIFF_THRESHOLD = 0.05 (5% of the
-[0,1] pixel scale), overlaid as a semi-transparent red region on top of the A
-(unperturbed) decoded frame. This threshold was chosen by inspecting the
-pooled raw-diff distribution across all already-existing frame-pairs before
-building any figure; it is not tuned per example or per figure.
+One frozen difference-overlay rule for every panel in both figures: raw
+mean-abs-RGB difference between the A and B decoded frame, thresholded at
+DIFF_THRESHOLD (5% of the [0,1] pixel scale), overlaid as translucent red on
+the unperturbed (A) frame. Chosen from the pooled raw-diff distribution
+before building any figure; not tuned per example.
 
 figureQ1_release_rollouts is the paper's embedded Figure 3. figureQ2_onset
-_rollouts is built with the identical frozen rule to substantiate the
-paper's text ("Figure~\\ref{fig:qualitative} shows release; onset looks the
-same") even though it is not itself included in the paper.
+_rollouts uses the identical rule to substantiate the paper's text that
+onset looks the same, though it is not itself included in the paper.
 """
 import os
 
@@ -55,11 +50,9 @@ def overlay_diff(a_chw, b_chw, threshold=DIFF_THRESHOLD, color=(1.0, 0.0, 0.0), 
 
 def build_condition_block(fig, gs, col0, key):
     """One condition occupies 4 columns (timesteps) x 3 rows (A, B, diff) at
-    grid column offset col0. No condition-name title is drawn here -- which
-    condition is which is stated in the LaTeX caption instead. Row labels
-    (A/B/diff) and column labels ($t_i$, ...) are kept as short,
-    axis-label-equivalent text; the per-panel %-pixel numbers are not drawn
-    (the qualitative text already reports the representative percentages)."""
+    grid column offset col0. Condition identity is stated in the LaTeX
+    caption, not drawn here.
+    """
     d = np.load(os.path.join(QUAL_DIR, f"{key}_frames.npz"))
     a_frames = [d["frame_base"]] + [d["recon_A_future"][i] for i in range(3)]
     b_frames = [d["frame_pert"]] + [d["recon_B_future"][i] for i in range(3)]
@@ -89,10 +82,9 @@ def build_condition_block(fig, gs, col0, key):
 
 
 def build_figure(conditions, out_name):
-    """conditions: list of (npz_key, label) -- exactly 2, placed side by side
-    (horizontal layout) rather than stacked, to keep the figure wide and
-    short. `label` is not drawn in the image; it is returned for use in the
-    LaTeX caption."""
+    """conditions: list of (npz_key, label), exactly 2, placed side by side.
+    label is not drawn in the image; it is for the LaTeX caption.
+    """
     fig = plt.figure(figsize=(9.5, 3.4))
     gs = GridSpec(3, 8, figure=fig, height_ratios=[1, 1, 0.62], hspace=0.08,
                    wspace=0.06)

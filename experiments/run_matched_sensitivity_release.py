@@ -1,13 +1,9 @@
 """
-Matched predictive-sensitivity experiment, release (paper Section "Causal
-Sensitivity Around Contact Transitions", Table 1: Release / Exploratory and
-Release / Confirmation). Reuses the identical onset pipeline
-(src/matched_sensitivity.py: match_controls / run_event / all_control_candidates)
-unchanged. The only change from the onset experiment is which contact
-transitions are extracted: release (True->False) instead of onset
-(False->True). No new episodes are generated -- this reads the already-saved
-pilot_episodes.pkl (seeds 0-9) and pilot_episodes_confirmation.pkl
-(seeds 100-109).
+Matched predictive-sensitivity experiment, release (paper Table 1: Release /
+Exploratory and Release / Confirmation). Reuses the onset pipeline
+(src/matched_sensitivity.py) unchanged, extracting release transitions
+(True->False) instead of onset. Reads the already-saved episode batches; no
+new episodes are generated.
 
 Usage: python run_matched_sensitivity_release.py [exploratory|confirmation]
 """
@@ -76,9 +72,9 @@ if __name__ == "__main__":
     which = sys.argv[1] if len(sys.argv) > 1 else "exploratory"
     if which == "exploratory":
         run_release_experiment("pilot_episodes.pkl", "rq2_release_exploratory_full.json",
-                                 "EXPLORATORY seeds 0-9")
+                                 "exploratory seeds 0-9")
     elif which == "confirmation":
         run_release_experiment("pilot_episodes_confirmation.pkl", "rq2_release_confirmation_full.json",
-                                 "CONFIRMATION seeds 100-109")
+                                 "confirmation seeds 100-109")
     else:
         raise ValueError(which)

@@ -1,22 +1,15 @@
 """
-Episode-cluster bootstrap inference for the confound-adjusted regression
-("Model 4" in analyze_confound_adjusted_rollout.py::part_c()) -- the model
-reported in the paper's Section "Contact-Conditioned Rollout Dynamics",
-second paragraph:
+Episode-cluster bootstrap for the confound-adjusted regression ("Model 4" in
+analyze_confound_adjusted_rollout.py::part_c()):
 
     slope_change ~ slope_before + release_dummy + onset_dummy
                    + mean_post_vel + mean_post_action
 
-This is not a new model. It reuses load_all()/build_table()/ols() from
-analyze_confound_adjusted_rollout.py unchanged, on the exact same 96 pooled
-event-windows from the 10 exploratory episodes. It adds the missing
-uncertainty calculation: the regression is refit from scratch inside each of
-5000 episode-cluster bootstrap resamples (resample unit = episode/seed, with
-replacement; a resampled episode's full set of event-window rows is included
-every time it is drawn).
-
-Does not touch rq1_confound_results.json. Writes a new file:
-outputs/rq1_model4_cluster_bootstrap.json
+Reuses load_all()/build_table()/ols() from analyze_confound_adjusted_rollout.py
+unchanged, refitting inside each of 5000 episode-cluster resamples (resample
+unit is episode/seed; a resampled episode's full set of event-window rows is
+included every time it is drawn). Writes outputs/rq1_model4_cluster_bootstrap.json,
+not touching rq1_confound_results.json.
 """
 import json
 import os
@@ -130,7 +123,7 @@ def main():
     release_summary = summarize(beta_release_orig, boot_release)
     onset_summary = summarize(beta_onset_orig, boot_onset)
 
-    print(f"\n=== release_dummy ===")
+    print(f"\nrelease_dummy:")
     print(f"  original beta      = {release_summary['original_beta']:+.6f}")
     print(f"  bootstrap mean      = {release_summary['bootstrap_mean']:+.6f}")
     print(f"  bootstrap median    = {release_summary['bootstrap_median']:+.6f}")
@@ -139,7 +132,7 @@ def main():
     inside = release_summary['ci95_lo'] <= release_summary['original_beta'] <= release_summary['ci95_hi']
     print(f"  original beta inside CI: {inside}")
 
-    print(f"\n=== onset_dummy ===")
+    print(f"\nonset_dummy:")
     print(f"  original beta      = {onset_summary['original_beta']:+.6f}")
     print(f"  bootstrap mean      = {onset_summary['bootstrap_mean']:+.6f}")
     print(f"  bootstrap median    = {onset_summary['bootstrap_median']:+.6f}")

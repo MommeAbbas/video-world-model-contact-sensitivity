@@ -6,15 +6,12 @@ validation/validate_cube_tracker.py's error arrays,
 analysis/select_qualitative_examples.py's frame arrays). No new experiment,
 reconstruction, tracking, or analysis is performed here.
 
-build_figure1 -> Figure 1 (intervention mechanics, embedded in the paper as
-    fig1_panel_ctx0/ctx1/unpert/pert/diff).
-build_figure2 -> Figure 2 (event-centered sensitivity profile, embedded as
-    fig2_panel_profile/contrast).
-build_figure3 -> not embedded in the current paper, but computes the exact
-    Spearman correlation and tracker-resolution band cited in the paper's
-    Section "Qualitative and Physical Interpretation"
-    (rho=0.645, p<0.0001, n=119; median tracker error 1.11-1.27px) -- kept
-    here because it reproduces those numbers, even though its plot itself
+build_figure1 -> Figure 1 (intervention mechanics: fig1_panel_ctx0/ctx1/unpert/pert/diff).
+build_figure2 -> Figure 2 (event-centered sensitivity profile: fig2_panel_profile/contrast).
+build_figure3 -> not embedded in the current paper, but computes the Spearman
+    correlation and tracker-resolution band cited in the paper's Section
+    "Qualitative and Physical Interpretation" (rho=0.645, p<0.0001, n=119;
+    median tracker error 1.11-1.27px), so it is kept even though its plot
     is not one of the paper's included figures.
 """
 import json
@@ -50,12 +47,8 @@ def savefig_all(fig, name):
     plt.close(fig)
 
 
-# ---------------------------------------------------------------------------
-# FIGURE 1: intervention mechanics (methods figure)
-# Saved as separate panel images with NO baked-in title/label text -- panel
-# letters (a)-(e) are added in the LaTeX source via \subcaption, not here.
-# Only the colorbar's own numeric ticks remain in-image (axis-equivalent).
-# ---------------------------------------------------------------------------
+# Figure 1 panels have no baked-in title/label text; panel letters (a)-(e)
+# are added in the LaTeX source via \subcaption.
 def _bare_image_fig(img, figsize=(1.9, 1.9)):
     fig, ax = plt.subplots(figsize=figsize)
     ax.imshow(chw_to_hwc(img), interpolation="nearest")
@@ -93,12 +86,8 @@ def build_figure1():
     print("Saved Figure 1 panels (PNG + PDF): ctx0, ctx1, unpert, pert, diff")
 
 
-# ---------------------------------------------------------------------------
-# FIGURE 2: main event-centered sensitivity result (2 panels).
-# Saved as two separate images, no baked-in (a)/(b) titles (added via LaTeX
-# \subcaption). Axis labels, tick labels, and the legend remain in-figure
-# since they are axis content, not prose.
-# ---------------------------------------------------------------------------
+# Figure 2's two panels are saved separately, no baked-in (a)/(b) titles
+# (added via LaTeX \subcaption).
 def build_figure2():
     with open(os.path.join(OUT_DIR, "rq2_event_centered_analysis_results.json")) as f:
         analysis = json.load(f)
@@ -155,11 +144,8 @@ def build_figure2():
     print("Saved Figure 2 panels (PNG + PDF): profile, contrast")
 
 
-# ---------------------------------------------------------------------------
-# FIGURE 3: aggregate physical interpretability validation (not embedded in
-# the current paper; kept because it reproduces the paper's Spearman/
-# tracker-band numbers -- see module docstring).
-# ---------------------------------------------------------------------------
+# Not embedded in the current paper; kept because it reproduces the
+# Spearman/tracker-band numbers (see module docstring).
 def build_figure3():
     with open(os.path.join(QUAL_DIR, "physical_interpretability_results.json")) as f:
         rows = json.load(f)

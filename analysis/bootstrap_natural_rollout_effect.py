@@ -1,19 +1,15 @@
 """
-Event-wise bootstrap comparison of natural rollout-error slope_change against
-matched free-motion controls (paper Section "Contact-Conditioned Rollout
-Dynamics", first paragraph). This is the original observational comparison:
-slope_change = slope_after - slope_before is computed per event (not on the
-pooled mean curve), and onset/release are each compared against control by an
-independent two-sample bootstrap resampling events with replacement within
-each group.
+Event-wise bootstrap comparison of natural rollout-error slope_change
+against matched free-motion controls (paper Section "Contact-Conditioned
+Rollout Dynamics", first paragraph). slope_change = slope_after -
+slope_before, computed per event; onset/release are each compared to
+control by an independent two-sample bootstrap resampling events with
+replacement.
 
-This resamples individual EVENTS, not episodes -- it does not correct for the
-fact that multiple events come from the same episode. The episode-cluster-
-corrected version of the model this paper actually leans on for its adjusted
-claim is a separate, later analysis (analyze_confound_adjusted_rollout.py /
-bootstrap_confound_adjusted_effect.py); this script intentionally reproduces
-only the original, simpler comparison and must not be changed to add episode
-clustering.
+Resamples individual events, not episodes; this does not correct for
+multiple events sharing an episode. The episode-cluster-corrected version
+is a separate, later analysis (analyze_confound_adjusted_rollout.py /
+bootstrap_confound_adjusted_effect.py). Do not add episode clustering here.
 
 Reproduces:
   onset:   diff ~= -0.00189, 95% CI ~= [-0.00706, +0.00330], p ~= 0.4859
