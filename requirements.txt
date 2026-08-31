@@ -1,0 +1,10 @@
+numpy
+scipy
+matplotlib
+torch==2.2.1
+torchvision==0.17.1
+transformers==4.38.2
+diffusers==0.27.0
+safetensors
+robosuite==1.5.2
+mujoco

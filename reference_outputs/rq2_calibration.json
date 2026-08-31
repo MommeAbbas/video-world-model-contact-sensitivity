@@ -1,0 +1,4346 @@
+{
+  "trials": [
+    {
+      "depth": "near",
+      "direction": "lateral_x",
+      "epsilon_requested_mm": 1,
+      "epsilon_actual_mm": 1.0,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 1.0,
+      "whole_image_mae": 0.2913614809513092,
+      "n_dyna_tokens_changed": 3,
+      "frac_dyna_tokens_changed": 0.1875,
+      "changed_grid_cells": [
+        [
+          0,
+          2
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "base_pixel_rc": [
+        166,
+        128
+      ],
+      "pert_pixel_rc": [
+        166,
+        129
+      ]
+    },
+    {
+      "depth": "near",
+      "direction": "lateral_x",
+      "epsilon_requested_mm": 2,
+      "epsilon_actual_mm": 2.0,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 1.0,
+      "whole_image_mae": 0.5776621699333191,
+      "n_dyna_tokens_changed": 3,
+      "frac_dyna_tokens_changed": 0.1875,
+      "changed_grid_cells": [
+        [
+          0,
+          2
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ]
+      ],
+      "base_pixel_rc": [
+        166,
+        128
+      ],
+      "pert_pixel_rc": [
+        166,
+        129
+      ]
+    },
+    {
+      "depth": "near",
+      "direction": "lateral_x",
+      "epsilon_requested_mm": 5,
+      "epsilon_actual_mm": 5.000000000000001,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 3.0,
+      "whole_image_mae": 1.4221700429916382,
+      "n_dyna_tokens_changed": 10,
+      "frac_dyna_tokens_changed": 0.625,
+      "changed_grid_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "base_pixel_rc": [
+        166,
+        128
+      ],
+      "pert_pixel_rc": [
+        166,
+        131
+      ]
+    },
+    {
+      "depth": "near",
+      "direction": "lateral_x",
+      "epsilon_requested_mm": 10,
+      "epsilon_actual_mm": 10.000000000000002,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 6.0,
+      "whole_image_mae": 2.7824604511260986,
+      "n_dyna_tokens_changed": 12,
+      "frac_dyna_tokens_changed": 0.75,
+      "changed_grid_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "base_pixel_rc": [
+        166,
+        128
+      ],
+      "pert_pixel_rc": [
+        166,
+        134
+      ]
+    },
+    {
+      "depth": "near",
+      "direction": "lateral_x",
+      "epsilon_requested_mm": 20,
+      "epsilon_actual_mm": 20.000000000000004,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 11.0,
+      "whole_image_mae": 5.417337894439697,
+      "n_dyna_tokens_changed": 15,
+      "frac_dyna_tokens_changed": 0.9375,
+      "changed_grid_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "base_pixel_rc": [
+        166,
+        128
+      ],
+      "pert_pixel_rc": [
+        166,
+        139
+      ]
+    },
+    {
+      "depth": "near",
+      "direction": "lateral_x",
+      "epsilon_requested_mm": 40,
+      "epsilon_actual_mm": 40.00000000000001,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 23.0,
+      "whole_image_mae": 11.910435676574707,
+      "n_dyna_tokens_changed": 16,
+      "frac_dyna_tokens_changed": 1.0,
+      "changed_grid_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "base_pixel_rc": [
+        166,
+        128
+      ],
+      "pert_pixel_rc": [
+        166,
+        151
+      ]
+    },
+    {
+      "depth": "near",
+      "direction": "lateral_x",
+      "epsilon_requested_mm": 60,
+      "epsilon_actual_mm": 60.0,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 34.0,
+      "whole_image_mae": 16.666488647460938,
+      "n_dyna_tokens_changed": 16,
+      "frac_dyna_tokens_changed": 1.0,
+      "changed_grid_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "base_pixel_rc": [
+        166,
+        128
+      ],
+      "pert_pixel_rc": [
+        166,
+        162
+      ]
+    },
+    {
+      "depth": "near",
+      "direction": "lateral_x",
+      "epsilon_requested_mm": 80,
+      "epsilon_actual_mm": 80.00000000000001,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 45.0,
+      "whole_image_mae": 19.3592529296875,
+      "n_dyna_tokens_changed": 16,
+      "frac_dyna_tokens_changed": 1.0,
+      "changed_grid_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "base_pixel_rc": [
+        166,
+        128
+      ],
+      "pert_pixel_rc": [
+        166,
+        173
+      ]
+    },
+    {
+      "depth": "near",
+      "direction": "lateral_y",
+      "epsilon_requested_mm": 1,
+      "epsilon_actual_mm": 1.0000000000000258,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 1.0,
+      "whole_image_mae": 0.9585774540901184,
+      "n_dyna_tokens_changed": 6,
+      "frac_dyna_tokens_changed": 0.375,
+      "changed_grid_cells": [
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ]
+      ],
+      "base_pixel_rc": [
+        166,
+        128
+      ],
+      "pert_pixel_rc": [
+        167,
+        128
+      ]
+    },
+    {
+      "depth": "near",
+      "direction": "lateral_y",
+      "epsilon_requested_mm": 2,
+      "epsilon_actual_mm": 1.9999999999999627,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 1.0,
+      "whole_image_mae": 1.2329915761947632,
+      "n_dyna_tokens_changed": 7,
+      "frac_dyna_tokens_changed": 0.4375,
+      "changed_grid_cells": [
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ]
+      ],
+      "base_pixel_rc": [
+        166,
+        128
+      ],
+      "pert_pixel_rc": [
+        167,
+        128
+      ]
+    },
+    {
+      "depth": "near",
+      "direction": "lateral_y",
+      "epsilon_requested_mm": 5,
+      "epsilon_actual_mm": 5.000000000000041,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 3.0,
+      "whole_image_mae": 2.0547332763671875,
+      "n_dyna_tokens_changed": 13,
+      "frac_dyna_tokens_changed": 0.8125,
+      "changed_grid_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "base_pixel_rc": [
+        166,
+        128
+      ],
+      "pert_pixel_rc": [
+        169,
+        128
+      ]
+    },
+    {
+      "depth": "near",
+      "direction": "lateral_y",
+      "epsilon_requested_mm": 10,
+      "epsilon_actual_mm": 9.999999999999991,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 6.0,
+      "whole_image_mae": 3.3882038593292236,
+      "n_dyna_tokens_changed": 16,
+      "frac_dyna_tokens_changed": 1.0,
+      "changed_grid_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "base_pixel_rc": [
+        166,
+        128
+      ],
+      "pert_pixel_rc": [
+        172,
+        128
+      ]
+    },
+    {
+      "depth": "near",
+      "direction": "lateral_y",
+      "epsilon_requested_mm": 20,
+      "epsilon_actual_mm": 19.99999999999995,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 11.0,
+      "whole_image_mae": 5.4418792724609375,
+      "n_dyna_tokens_changed": 16,
+      "frac_dyna_tokens_changed": 1.0,
+      "changed_grid_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "base_pixel_rc": [
+        166,
+        128
+      ],
+      "pert_pixel_rc": [
+        177,
+        128
+      ]
+    },
+    {
+      "depth": "near",
+      "direction": "lateral_y",
+      "epsilon_requested_mm": 40,
+      "epsilon_actual_mm": 40.00000000000002,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 23.0,
+      "whole_image_mae": 8.802291870117188,
+      "n_dyna_tokens_changed": 16,
+      "frac_dyna_tokens_changed": 1.0,
+      "changed_grid_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "base_pixel_rc": [
+        166,
+        128
+      ],
+      "pert_pixel_rc": [
+        189,
+        128
+      ]
+    },
+    {
+      "depth": "near",
+      "direction": "lateral_y",
+      "epsilon_requested_mm": 60,
+      "epsilon_actual_mm": 59.99999999999998,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 34.0,
+      "whole_image_mae": 11.963592529296875,
+      "n_dyna_tokens_changed": 15,
+      "frac_dyna_tokens_changed": 0.9375,
+      "changed_grid_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "base_pixel_rc": [
+        166,
+        128
+      ],
+      "pert_pixel_rc": [
+        200,
+        128
+      ]
+    },
+    {
+      "depth": "near",
+      "direction": "lateral_y",
+      "epsilon_requested_mm": 80,
+      "epsilon_actual_mm": 80.00000000000001,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 45.0,
+      "whole_image_mae": 14.789515495300293,
+      "n_dyna_tokens_changed": 15,
+      "frac_dyna_tokens_changed": 0.9375,
+      "changed_grid_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "base_pixel_rc": [
+        166,
+        128
+      ],
+      "pert_pixel_rc": [
+        211,
+        128
+      ]
+    },
+    {
+      "depth": "near",
+      "direction": "depth_z",
+      "epsilon_requested_mm": 1,
+      "epsilon_actual_mm": 0.999999999999972,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 0.0,
+      "whole_image_mae": 0.7676289677619934,
+      "n_dyna_tokens_changed": 6,
+      "frac_dyna_tokens_changed": 0.375,
+      "changed_grid_cells": [
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "base_pixel_rc": [
+        166,
+        128
+      ],
+      "pert_pixel_rc": [
+        166,
+        128
+      ]
+    },
+    {
+      "depth": "near",
+      "direction": "depth_z",
+      "epsilon_requested_mm": 2,
+      "epsilon_actual_mm": 2.000000000000011,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 0.0,
+      "whole_image_mae": 0.8581187129020691,
+      "n_dyna_tokens_changed": 6,
+      "frac_dyna_tokens_changed": 0.375,
+      "changed_grid_cells": [
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "base_pixel_rc": [
+        166,
+        128
+      ],
+      "pert_pixel_rc": [
+        166,
+        128
+      ]
+    },
+    {
+      "depth": "near",
+      "direction": "depth_z",
+      "epsilon_requested_mm": 5,
+      "epsilon_actual_mm": 4.999999999999994,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 0.0,
+      "whole_image_mae": 1.1006978750228882,
+      "n_dyna_tokens_changed": 5,
+      "frac_dyna_tokens_changed": 0.3125,
+      "changed_grid_cells": [
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "base_pixel_rc": [
+        166,
+        128
+      ],
+      "pert_pixel_rc": [
+        166,
+        128
+      ]
+    },
+    {
+      "depth": "near",
+      "direction": "depth_z",
+      "epsilon_requested_mm": 10,
+      "epsilon_actual_mm": 10.000000000000034,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 1.0,
+      "whole_image_mae": 1.4988759756088257,
+      "n_dyna_tokens_changed": 7,
+      "frac_dyna_tokens_changed": 0.4375,
+      "changed_grid_cells": [
+        [
+          0,
+          2
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "base_pixel_rc": [
+        166,
+        128
+      ],
+      "pert_pixel_rc": [
+        165,
+        128
+      ]
+    },
+    {
+      "depth": "near",
+      "direction": "depth_z",
+      "epsilon_requested_mm": 20,
+      "epsilon_actual_mm": 20.00000000000002,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 1.0,
+      "whole_image_mae": 2.910344362258911,
+      "n_dyna_tokens_changed": 15,
+      "frac_dyna_tokens_changed": 0.9375,
+      "changed_grid_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "base_pixel_rc": [
+        166,
+        128
+      ],
+      "pert_pixel_rc": [
+        165,
+        128
+      ]
+    },
+    {
+      "depth": "near",
+      "direction": "depth_z",
+      "epsilon_requested_mm": 40,
+      "epsilon_actual_mm": 39.99999999999998,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 3.0,
+      "whole_image_mae": 4.508473873138428,
+      "n_dyna_tokens_changed": 16,
+      "frac_dyna_tokens_changed": 1.0,
+      "changed_grid_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "base_pixel_rc": [
+        166,
+        128
+      ],
+      "pert_pixel_rc": [
+        163,
+        128
+      ]
+    },
+    {
+      "depth": "near",
+      "direction": "depth_z",
+      "epsilon_requested_mm": 60,
+      "epsilon_actual_mm": 60.0,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 4.0,
+      "whole_image_mae": 5.5134429931640625,
+      "n_dyna_tokens_changed": 16,
+      "frac_dyna_tokens_changed": 1.0,
+      "changed_grid_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "base_pixel_rc": [
+        166,
+        128
+      ],
+      "pert_pixel_rc": [
+        162,
+        128
+      ]
+    },
+    {
+      "depth": "near",
+      "direction": "depth_z",
+      "epsilon_requested_mm": 80,
+      "epsilon_actual_mm": 80.00000000000001,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 5.0,
+      "whole_image_mae": 6.33282995223999,
+      "n_dyna_tokens_changed": 16,
+      "frac_dyna_tokens_changed": 1.0,
+      "changed_grid_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "base_pixel_rc": [
+        166,
+        128
+      ],
+      "pert_pixel_rc": [
+        161,
+        128
+      ]
+    },
+    {
+      "depth": "middle",
+      "direction": "lateral_x",
+      "epsilon_requested_mm": 1,
+      "epsilon_actual_mm": 1.0,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 0.0,
+      "whole_image_mae": 0.1245625838637352,
+      "n_dyna_tokens_changed": 2,
+      "frac_dyna_tokens_changed": 0.125,
+      "changed_grid_cells": [
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          2
+        ]
+      ],
+      "base_pixel_rc": [
+        110,
+        128
+      ],
+      "pert_pixel_rc": [
+        110,
+        128
+      ]
+    },
+    {
+      "depth": "middle",
+      "direction": "lateral_x",
+      "epsilon_requested_mm": 2,
+      "epsilon_actual_mm": 2.0,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 1.0,
+      "whole_image_mae": 0.2508443295955658,
+      "n_dyna_tokens_changed": 3,
+      "frac_dyna_tokens_changed": 0.1875,
+      "changed_grid_cells": [
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ]
+      ],
+      "base_pixel_rc": [
+        110,
+        128
+      ],
+      "pert_pixel_rc": [
+        110,
+        129
+      ]
+    },
+    {
+      "depth": "middle",
+      "direction": "lateral_x",
+      "epsilon_requested_mm": 5,
+      "epsilon_actual_mm": 5.000000000000001,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 2.0,
+      "whole_image_mae": 0.6218312382698059,
+      "n_dyna_tokens_changed": 6,
+      "frac_dyna_tokens_changed": 0.375,
+      "changed_grid_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ]
+      ],
+      "base_pixel_rc": [
+        110,
+        128
+      ],
+      "pert_pixel_rc": [
+        110,
+        130
+      ]
+    },
+    {
+      "depth": "middle",
+      "direction": "lateral_x",
+      "epsilon_requested_mm": 10,
+      "epsilon_actual_mm": 10.000000000000002,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 4.0,
+      "whole_image_mae": 1.2265421152114868,
+      "n_dyna_tokens_changed": 12,
+      "frac_dyna_tokens_changed": 0.75,
+      "changed_grid_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          2
+        ]
+      ],
+      "base_pixel_rc": [
+        110,
+        128
+      ],
+      "pert_pixel_rc": [
+        110,
+        132
+      ]
+    },
+    {
+      "depth": "middle",
+      "direction": "lateral_x",
+      "epsilon_requested_mm": 20,
+      "epsilon_actual_mm": 20.000000000000004,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 9.0,
+      "whole_image_mae": 2.4332683086395264,
+      "n_dyna_tokens_changed": 15,
+      "frac_dyna_tokens_changed": 0.9375,
+      "changed_grid_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "base_pixel_rc": [
+        110,
+        128
+      ],
+      "pert_pixel_rc": [
+        110,
+        137
+      ]
+    },
+    {
+      "depth": "middle",
+      "direction": "lateral_x",
+      "epsilon_requested_mm": 40,
+      "epsilon_actual_mm": 40.00000000000001,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 18.0,
+      "whole_image_mae": 4.755223751068115,
+      "n_dyna_tokens_changed": 15,
+      "frac_dyna_tokens_changed": 0.9375,
+      "changed_grid_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "base_pixel_rc": [
+        110,
+        128
+      ],
+      "pert_pixel_rc": [
+        110,
+        146
+      ]
+    },
+    {
+      "depth": "middle",
+      "direction": "lateral_x",
+      "epsilon_requested_mm": 60,
+      "epsilon_actual_mm": 60.0,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 27.0,
+      "whole_image_mae": 6.901316165924072,
+      "n_dyna_tokens_changed": 16,
+      "frac_dyna_tokens_changed": 1.0,
+      "changed_grid_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "base_pixel_rc": [
+        110,
+        128
+      ],
+      "pert_pixel_rc": [
+        110,
+        155
+      ]
+    },
+    {
+      "depth": "middle",
+      "direction": "lateral_x",
+      "epsilon_requested_mm": 80,
+      "epsilon_actual_mm": 80.00000000000001,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 36.0,
+      "whole_image_mae": 9.181838989257812,
+      "n_dyna_tokens_changed": 16,
+      "frac_dyna_tokens_changed": 1.0,
+      "changed_grid_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "base_pixel_rc": [
+        110,
+        128
+      ],
+      "pert_pixel_rc": [
+        110,
+        164
+      ]
+    },
+    {
+      "depth": "middle",
+      "direction": "lateral_y",
+      "epsilon_requested_mm": 1,
+      "epsilon_actual_mm": 1.0000000000000258,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 0.0,
+      "whole_image_mae": 0.12554931640625,
+      "n_dyna_tokens_changed": 3,
+      "frac_dyna_tokens_changed": 0.1875,
+      "changed_grid_cells": [
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          0
+        ]
+      ],
+      "base_pixel_rc": [
+        110,
+        128
+      ],
+      "pert_pixel_rc": [
+        110,
+        128
+      ]
+    },
+    {
+      "depth": "middle",
+      "direction": "lateral_y",
+      "epsilon_requested_mm": 2,
+      "epsilon_actual_mm": 1.9999999999999627,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 0.0,
+      "whole_image_mae": 0.2542317807674408,
+      "n_dyna_tokens_changed": 4,
+      "frac_dyna_tokens_changed": 0.25,
+      "changed_grid_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          0
+        ]
+      ],
+      "base_pixel_rc": [
+        110,
+        128
+      ],
+      "pert_pixel_rc": [
+        110,
+        128
+      ]
+    },
+    {
+      "depth": "middle",
+      "direction": "lateral_y",
+      "epsilon_requested_mm": 5,
+      "epsilon_actual_mm": 5.000000000000032,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 2.0,
+      "whole_image_mae": 0.6298980712890625,
+      "n_dyna_tokens_changed": 8,
+      "frac_dyna_tokens_changed": 0.5,
+      "changed_grid_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "base_pixel_rc": [
+        110,
+        128
+      ],
+      "pert_pixel_rc": [
+        112,
+        128
+      ]
+    },
+    {
+      "depth": "middle",
+      "direction": "lateral_y",
+      "epsilon_requested_mm": 10,
+      "epsilon_actual_mm": 9.999999999999984,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 4.0,
+      "whole_image_mae": 1.244171142578125,
+      "n_dyna_tokens_changed": 13,
+      "frac_dyna_tokens_changed": 0.8125,
+      "changed_grid_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "base_pixel_rc": [
+        110,
+        128
+      ],
+      "pert_pixel_rc": [
+        114,
+        128
+      ]
+    },
+    {
+      "depth": "middle",
+      "direction": "lateral_y",
+      "epsilon_requested_mm": 20,
+      "epsilon_actual_mm": 19.999999999999957,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 9.0,
+      "whole_image_mae": 2.279871702194214,
+      "n_dyna_tokens_changed": 15,
+      "frac_dyna_tokens_changed": 0.9375,
+      "changed_grid_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "base_pixel_rc": [
+        110,
+        128
+      ],
+      "pert_pixel_rc": [
+        119,
+        128
+      ]
+    },
+    {
+      "depth": "middle",
+      "direction": "lateral_y",
+      "epsilon_requested_mm": 40,
+      "epsilon_actual_mm": 40.00000000000001,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 17.0,
+      "whole_image_mae": 4.060028076171875,
+      "n_dyna_tokens_changed": 16,
+      "frac_dyna_tokens_changed": 1.0,
+      "changed_grid_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "base_pixel_rc": [
+        110,
+        128
+      ],
+      "pert_pixel_rc": [
+        127,
+        128
+      ]
+    },
+    {
+      "depth": "middle",
+      "direction": "lateral_y",
+      "epsilon_requested_mm": 60,
+      "epsilon_actual_mm": 59.99999999999998,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 26.0,
+      "whole_image_mae": 5.596837520599365,
+      "n_dyna_tokens_changed": 16,
+      "frac_dyna_tokens_changed": 1.0,
+      "changed_grid_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "base_pixel_rc": [
+        110,
+        128
+      ],
+      "pert_pixel_rc": [
+        136,
+        128
+      ]
+    },
+    {
+      "depth": "middle",
+      "direction": "lateral_y",
+      "epsilon_requested_mm": 80,
+      "epsilon_actual_mm": 80.00000000000001,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 35.0,
+      "whole_image_mae": 7.1401519775390625,
+      "n_dyna_tokens_changed": 16,
+      "frac_dyna_tokens_changed": 1.0,
+      "changed_grid_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "base_pixel_rc": [
+        110,
+        128
+      ],
+      "pert_pixel_rc": [
+        145,
+        128
+      ]
+    },
+    {
+      "depth": "middle",
+      "direction": "depth_z",
+      "epsilon_requested_mm": 1,
+      "epsilon_actual_mm": 0.999999999999972,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 0.0,
+      "whole_image_mae": 0.02801004983484745,
+      "n_dyna_tokens_changed": 1,
+      "frac_dyna_tokens_changed": 0.0625,
+      "changed_grid_cells": [
+        [
+          1,
+          1
+        ]
+      ],
+      "base_pixel_rc": [
+        110,
+        128
+      ],
+      "pert_pixel_rc": [
+        110,
+        128
+      ]
+    },
+    {
+      "depth": "middle",
+      "direction": "depth_z",
+      "epsilon_requested_mm": 2,
+      "epsilon_actual_mm": 2.000000000000011,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 0.0,
+      "whole_image_mae": 0.0523732490837574,
+      "n_dyna_tokens_changed": 1,
+      "frac_dyna_tokens_changed": 0.0625,
+      "changed_grid_cells": [
+        [
+          1,
+          1
+        ]
+      ],
+      "base_pixel_rc": [
+        110,
+        128
+      ],
+      "pert_pixel_rc": [
+        110,
+        128
+      ]
+    },
+    {
+      "depth": "middle",
+      "direction": "depth_z",
+      "epsilon_requested_mm": 5,
+      "epsilon_actual_mm": 5.000000000000005,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 0.0,
+      "whole_image_mae": 0.1296641081571579,
+      "n_dyna_tokens_changed": 2,
+      "frac_dyna_tokens_changed": 0.125,
+      "changed_grid_cells": [
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          2
+        ]
+      ],
+      "base_pixel_rc": [
+        110,
+        128
+      ],
+      "pert_pixel_rc": [
+        110,
+        128
+      ]
+    },
+    {
+      "depth": "middle",
+      "direction": "depth_z",
+      "epsilon_requested_mm": 10,
+      "epsilon_actual_mm": 10.00000000000001,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 0.0,
+      "whole_image_mae": 0.2585906982421875,
+      "n_dyna_tokens_changed": 2,
+      "frac_dyna_tokens_changed": 0.125,
+      "changed_grid_cells": [
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          2
+        ]
+      ],
+      "base_pixel_rc": [
+        110,
+        128
+      ],
+      "pert_pixel_rc": [
+        110,
+        128
+      ]
+    },
+    {
+      "depth": "middle",
+      "direction": "depth_z",
+      "epsilon_requested_mm": 20,
+      "epsilon_actual_mm": 20.00000000000002,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 0.0,
+      "whole_image_mae": 0.5526631474494934,
+      "n_dyna_tokens_changed": 3,
+      "frac_dyna_tokens_changed": 0.1875,
+      "changed_grid_cells": [
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ]
+      ],
+      "base_pixel_rc": [
+        110,
+        128
+      ],
+      "pert_pixel_rc": [
+        110,
+        128
+      ]
+    },
+    {
+      "depth": "middle",
+      "direction": "depth_z",
+      "epsilon_requested_mm": 40,
+      "epsilon_actual_mm": 39.99999999999998,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 1.0,
+      "whole_image_mae": 1.316436767578125,
+      "n_dyna_tokens_changed": 7,
+      "frac_dyna_tokens_changed": 0.4375,
+      "changed_grid_cells": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ]
+      ],
+      "base_pixel_rc": [
+        110,
+        128
+      ],
+      "pert_pixel_rc": [
+        111,
+        128
+      ]
+    },
+    {
+      "depth": "middle",
+      "direction": "depth_z",
+      "epsilon_requested_mm": 60,
+      "epsilon_actual_mm": 60.000000000000014,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 1.0,
+      "whole_image_mae": 2.069585084915161,
+      "n_dyna_tokens_changed": 13,
+      "frac_dyna_tokens_changed": 0.8125,
+      "changed_grid_cells": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "base_pixel_rc": [
+        110,
+        128
+      ],
+      "pert_pixel_rc": [
+        111,
+        128
+      ]
+    },
+    {
+      "depth": "middle",
+      "direction": "depth_z",
+      "epsilon_requested_mm": 80,
+      "epsilon_actual_mm": 80.00000000000003,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 1.0,
+      "whole_image_mae": 2.8350067138671875,
+      "n_dyna_tokens_changed": 16,
+      "frac_dyna_tokens_changed": 1.0,
+      "changed_grid_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "base_pixel_rc": [
+        110,
+        128
+      ],
+      "pert_pixel_rc": [
+        111,
+        128
+      ]
+    },
+    {
+      "depth": "far",
+      "direction": "lateral_x",
+      "epsilon_requested_mm": 1,
+      "epsilon_actual_mm": 1.0,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 0.0,
+      "whole_image_mae": 0.07916259765625,
+      "n_dyna_tokens_changed": 1,
+      "frac_dyna_tokens_changed": 0.0625,
+      "changed_grid_cells": [
+        [
+          3,
+          0
+        ]
+      ],
+      "base_pixel_rc": [
+        73,
+        128
+      ],
+      "pert_pixel_rc": [
+        73,
+        128
+      ]
+    },
+    {
+      "depth": "far",
+      "direction": "lateral_x",
+      "epsilon_requested_mm": 2,
+      "epsilon_actual_mm": 2.0,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 1.0,
+      "whole_image_mae": 0.16107177734375,
+      "n_dyna_tokens_changed": 1,
+      "frac_dyna_tokens_changed": 0.0625,
+      "changed_grid_cells": [
+        [
+          3,
+          0
+        ]
+      ],
+      "base_pixel_rc": [
+        73,
+        128
+      ],
+      "pert_pixel_rc": [
+        73,
+        129
+      ]
+    },
+    {
+      "depth": "far",
+      "direction": "lateral_x",
+      "epsilon_requested_mm": 5,
+      "epsilon_actual_mm": 5.000000000000001,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 2.0,
+      "whole_image_mae": 0.3895365297794342,
+      "n_dyna_tokens_changed": 6,
+      "frac_dyna_tokens_changed": 0.375,
+      "changed_grid_cells": [
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ]
+      ],
+      "base_pixel_rc": [
+        73,
+        128
+      ],
+      "pert_pixel_rc": [
+        73,
+        130
+      ]
+    },
+    {
+      "depth": "far",
+      "direction": "lateral_x",
+      "epsilon_requested_mm": 10,
+      "epsilon_actual_mm": 10.000000000000002,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 4.0,
+      "whole_image_mae": 0.7522430419921875,
+      "n_dyna_tokens_changed": 9,
+      "frac_dyna_tokens_changed": 0.5625,
+      "changed_grid_cells": [
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ]
+      ],
+      "base_pixel_rc": [
+        73,
+        128
+      ],
+      "pert_pixel_rc": [
+        73,
+        132
+      ]
+    },
+    {
+      "depth": "far",
+      "direction": "lateral_x",
+      "epsilon_requested_mm": 20,
+      "epsilon_actual_mm": 20.000000000000004,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 7.0,
+      "whole_image_mae": 1.3770090341567993,
+      "n_dyna_tokens_changed": 12,
+      "frac_dyna_tokens_changed": 0.75,
+      "changed_grid_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          2
+        ]
+      ],
+      "base_pixel_rc": [
+        73,
+        128
+      ],
+      "pert_pixel_rc": [
+        73,
+        135
+      ]
+    },
+    {
+      "depth": "far",
+      "direction": "lateral_x",
+      "epsilon_requested_mm": 40,
+      "epsilon_actual_mm": 40.00000000000001,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 15.0,
+      "whole_image_mae": 2.3082988262176514,
+      "n_dyna_tokens_changed": 15,
+      "frac_dyna_tokens_changed": 0.9375,
+      "changed_grid_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ]
+      ],
+      "base_pixel_rc": [
+        73,
+        128
+      ],
+      "pert_pixel_rc": [
+        73,
+        143
+      ]
+    },
+    {
+      "depth": "far",
+      "direction": "lateral_x",
+      "epsilon_requested_mm": 60,
+      "epsilon_actual_mm": 60.0,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 22.0,
+      "whole_image_mae": 3.213862180709839,
+      "n_dyna_tokens_changed": 15,
+      "frac_dyna_tokens_changed": 0.9375,
+      "changed_grid_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ]
+      ],
+      "base_pixel_rc": [
+        73,
+        128
+      ],
+      "pert_pixel_rc": [
+        73,
+        150
+      ]
+    },
+    {
+      "depth": "far",
+      "direction": "lateral_x",
+      "epsilon_requested_mm": 80,
+      "epsilon_actual_mm": 80.00000000000001,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 30.0,
+      "whole_image_mae": 4.265401363372803,
+      "n_dyna_tokens_changed": 16,
+      "frac_dyna_tokens_changed": 1.0,
+      "changed_grid_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "base_pixel_rc": [
+        73,
+        128
+      ],
+      "pert_pixel_rc": [
+        73,
+        158
+      ]
+    },
+    {
+      "depth": "far",
+      "direction": "lateral_y",
+      "epsilon_requested_mm": 1,
+      "epsilon_actual_mm": 1.0000000000000258,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 0.0,
+      "whole_image_mae": 0.0786895751953125,
+      "n_dyna_tokens_changed": 1,
+      "frac_dyna_tokens_changed": 0.0625,
+      "changed_grid_cells": [
+        [
+          0,
+          1
+        ]
+      ],
+      "base_pixel_rc": [
+        73,
+        128
+      ],
+      "pert_pixel_rc": [
+        73,
+        128
+      ]
+    },
+    {
+      "depth": "far",
+      "direction": "lateral_y",
+      "epsilon_requested_mm": 2,
+      "epsilon_actual_mm": 1.9999999999999627,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 0.0,
+      "whole_image_mae": 0.1581319123506546,
+      "n_dyna_tokens_changed": 2,
+      "frac_dyna_tokens_changed": 0.125,
+      "changed_grid_cells": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          2
+        ]
+      ],
+      "base_pixel_rc": [
+        73,
+        128
+      ],
+      "pert_pixel_rc": [
+        73,
+        128
+      ]
+    },
+    {
+      "depth": "far",
+      "direction": "lateral_y",
+      "epsilon_requested_mm": 5,
+      "epsilon_actual_mm": 5.000000000000032,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 1.0,
+      "whole_image_mae": 0.3970235288143158,
+      "n_dyna_tokens_changed": 6,
+      "frac_dyna_tokens_changed": 0.375,
+      "changed_grid_cells": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ]
+      ],
+      "base_pixel_rc": [
+        73,
+        128
+      ],
+      "pert_pixel_rc": [
+        74,
+        128
+      ]
+    },
+    {
+      "depth": "far",
+      "direction": "lateral_y",
+      "epsilon_requested_mm": 10,
+      "epsilon_actual_mm": 9.999999999999984,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 3.0,
+      "whole_image_mae": 0.7979329228401184,
+      "n_dyna_tokens_changed": 9,
+      "frac_dyna_tokens_changed": 0.5625,
+      "changed_grid_cells": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          0
+        ]
+      ],
+      "base_pixel_rc": [
+        73,
+        128
+      ],
+      "pert_pixel_rc": [
+        76,
+        128
+      ]
+    },
+    {
+      "depth": "far",
+      "direction": "lateral_y",
+      "epsilon_requested_mm": 20,
+      "epsilon_actual_mm": 19.999999999999957,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 7.0,
+      "whole_image_mae": 1.4459482431411743,
+      "n_dyna_tokens_changed": 12,
+      "frac_dyna_tokens_changed": 0.75,
+      "changed_grid_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          0
+        ]
+      ],
+      "base_pixel_rc": [
+        73,
+        128
+      ],
+      "pert_pixel_rc": [
+        80,
+        128
+      ]
+    },
+    {
+      "depth": "far",
+      "direction": "lateral_y",
+      "epsilon_requested_mm": 40,
+      "epsilon_actual_mm": 40.00000000000001,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 14.0,
+      "whole_image_mae": 2.769439697265625,
+      "n_dyna_tokens_changed": 15,
+      "frac_dyna_tokens_changed": 0.9375,
+      "changed_grid_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ]
+      ],
+      "base_pixel_rc": [
+        73,
+        128
+      ],
+      "pert_pixel_rc": [
+        87,
+        128
+      ]
+    },
+    {
+      "depth": "far",
+      "direction": "lateral_y",
+      "epsilon_requested_mm": 60,
+      "epsilon_actual_mm": 59.99999999999997,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 22.0,
+      "whole_image_mae": 3.9296367168426514,
+      "n_dyna_tokens_changed": 14,
+      "frac_dyna_tokens_changed": 0.875,
+      "changed_grid_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ]
+      ],
+      "base_pixel_rc": [
+        73,
+        128
+      ],
+      "pert_pixel_rc": [
+        95,
+        128
+      ]
+    },
+    {
+      "depth": "far",
+      "direction": "lateral_y",
+      "epsilon_requested_mm": 80,
+      "epsilon_actual_mm": 80.00000000000001,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 29.0,
+      "whole_image_mae": 4.99566125869751,
+      "n_dyna_tokens_changed": 15,
+      "frac_dyna_tokens_changed": 0.9375,
+      "changed_grid_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "base_pixel_rc": [
+        73,
+        128
+      ],
+      "pert_pixel_rc": [
+        102,
+        128
+      ]
+    },
+    {
+      "depth": "far",
+      "direction": "depth_z",
+      "epsilon_requested_mm": 1,
+      "epsilon_actual_mm": 0.999999999999972,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 0.0,
+      "whole_image_mae": 0.0207366943359375,
+      "n_dyna_tokens_changed": 1,
+      "frac_dyna_tokens_changed": 0.0625,
+      "changed_grid_cells": [
+        [
+          0,
+          1
+        ]
+      ],
+      "base_pixel_rc": [
+        73,
+        128
+      ],
+      "pert_pixel_rc": [
+        73,
+        128
+      ]
+    },
+    {
+      "depth": "far",
+      "direction": "depth_z",
+      "epsilon_requested_mm": 2,
+      "epsilon_actual_mm": 2.000000000000011,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 0.0,
+      "whole_image_mae": 0.0334676094353199,
+      "n_dyna_tokens_changed": 1,
+      "frac_dyna_tokens_changed": 0.0625,
+      "changed_grid_cells": [
+        [
+          0,
+          1
+        ]
+      ],
+      "base_pixel_rc": [
+        73,
+        128
+      ],
+      "pert_pixel_rc": [
+        73,
+        128
+      ]
+    },
+    {
+      "depth": "far",
+      "direction": "depth_z",
+      "epsilon_requested_mm": 5,
+      "epsilon_actual_mm": 5.000000000000005,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 0.0,
+      "whole_image_mae": 0.0862681046128273,
+      "n_dyna_tokens_changed": 1,
+      "frac_dyna_tokens_changed": 0.0625,
+      "changed_grid_cells": [
+        [
+          0,
+          1
+        ]
+      ],
+      "base_pixel_rc": [
+        73,
+        128
+      ],
+      "pert_pixel_rc": [
+        73,
+        128
+      ]
+    },
+    {
+      "depth": "far",
+      "direction": "depth_z",
+      "epsilon_requested_mm": 10,
+      "epsilon_actual_mm": 10.00000000000001,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 0.0,
+      "whole_image_mae": 0.1648610383272171,
+      "n_dyna_tokens_changed": 2,
+      "frac_dyna_tokens_changed": 0.125,
+      "changed_grid_cells": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ]
+      ],
+      "base_pixel_rc": [
+        73,
+        128
+      ],
+      "pert_pixel_rc": [
+        73,
+        128
+      ]
+    },
+    {
+      "depth": "far",
+      "direction": "depth_z",
+      "epsilon_requested_mm": 20,
+      "epsilon_actual_mm": 20.00000000000002,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 1.0,
+      "whole_image_mae": 0.280548095703125,
+      "n_dyna_tokens_changed": 4,
+      "frac_dyna_tokens_changed": 0.25,
+      "changed_grid_cells": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ]
+      ],
+      "base_pixel_rc": [
+        73,
+        128
+      ],
+      "pert_pixel_rc": [
+        74,
+        128
+      ]
+    },
+    {
+      "depth": "far",
+      "direction": "depth_z",
+      "epsilon_requested_mm": 40,
+      "epsilon_actual_mm": 39.999999999999986,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 2.0,
+      "whole_image_mae": 0.8116607666015625,
+      "n_dyna_tokens_changed": 10,
+      "frac_dyna_tokens_changed": 0.625,
+      "changed_grid_cells": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "base_pixel_rc": [
+        73,
+        128
+      ],
+      "pert_pixel_rc": [
+        75,
+        128
+      ]
+    },
+    {
+      "depth": "far",
+      "direction": "depth_z",
+      "epsilon_requested_mm": 60,
+      "epsilon_actual_mm": 60.000000000000014,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 3.0,
+      "whole_image_mae": 1.2939656972885132,
+      "n_dyna_tokens_changed": 10,
+      "frac_dyna_tokens_changed": 0.625,
+      "changed_grid_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ]
+      ],
+      "base_pixel_rc": [
+        73,
+        128
+      ],
+      "pert_pixel_rc": [
+        76,
+        128
+      ]
+    },
+    {
+      "depth": "far",
+      "direction": "depth_z",
+      "epsilon_requested_mm": 80,
+      "epsilon_actual_mm": 80.00000000000003,
+      "other_qpos_max_abs_diff": 0.0,
+      "pixel_displacement_projected": 4.0,
+      "whole_image_mae": 1.7599588632583618,
+      "n_dyna_tokens_changed": 13,
+      "frac_dyna_tokens_changed": 0.8125,
+      "changed_grid_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          2
+        ]
+      ],
+      "base_pixel_rc": [
+        73,
+        128
+      ],
+      "pert_pixel_rc": [
+        77,
+        128
+      ]
+    }
+  ],
+  "controls": [
+    {
+      "depth": "near",
+      "pixel_mae_repeat": 0.0,
+      "token_hamming_repeat": 0,
+      "qpos_max_abs_diff_after_restore": 0.0
+    },
+    {
+      "depth": "middle",
+      "pixel_mae_repeat": 0.0,
+      "token_hamming_repeat": 0,
+      "qpos_max_abs_diff_after_restore": 0.0
+    },
+    {
+      "depth": "far",
+      "pixel_mae_repeat": 0.0,
+      "token_hamming_repeat": 0,
+      "qpos_max_abs_diff_after_restore": 0.0
+    }
+  ],
+  "depth_positions": {
+    "near": [
+      0.28,
+      0.0,
+      0.8700000000000001
+    ],
+    "middle": [
+      0.1,
+      0.0,
+      0.8700000000000001
+    ],
+    "far": [
+      -0.08,
+      0.0,
+      0.8700000000000001
+    ]
+  },
+  "directions": {
+    "lateral_x": [
+      -4.3381203335135515e-07,
+      0.9999999999997007,
+      6.40655484107633e-07
+    ],
+    "lateral_y": [
+      0.6007318903394878,
+      7.727771075827229e-07,
+      -0.7994505587768067
+    ],
+    "depth_z": [
+      -0.7994505587770625,
+      3.8050907591458134e-08,
+      -0.6007318903396434
+    ]
+  }
+}

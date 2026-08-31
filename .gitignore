@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+
+# OS / editor
+.DS_Store
+.claude/
+.vscode/
+.idea/
+
+# Model checkpoint (download separately, see README)
+checkpoints/
+
+# Generated experiment outputs (regenerate via the scripts; not committed)
+outputs/
+
+# Optional demo clip used only by validation/ scripts
+demo_data/
+
+# Logs / temp
+*.log
+tmp/

@@ -1,0 +1,78 @@
+{
+  "model": "slope_change ~ slope_before + release_dummy + onset_dummy + mean_post_vel + mean_post_action",
+  "n_rows": 96,
+  "n_episodes": 10,
+  "episode_ids": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "rng_seed": 0,
+  "n_boot_requested": 5000,
+  "n_boot_valid": 5000,
+  "n_boot_failed": 0,
+  "failed_replicate_details": [],
+  "original_fit_all_coefs": {
+    "intercept": {
+      "beta": -0.0006558031085760723,
+      "se": 0.0020717972758239967,
+      "t": -0.3165382618409158,
+      "p": 0.7523270090580501
+    },
+    "slope_before": {
+      "beta": -1.1565677023615148,
+      "se": 0.050364007814397975,
+      "t": -22.96417129120684,
+      "p": 0.0
+    },
+    "release_dummy": {
+      "beta": -0.003475034814505567,
+      "se": 0.0012401038842634095,
+      "t": -2.8022126683117765,
+      "p": 0.006214156022455564
+    },
+    "onset_dummy": {
+      "beta": -0.0014753436246128637,
+      "se": 0.0012845587556598059,
+      "t": -1.148521714645168,
+      "p": 0.2537966820483504
+    },
+    "mean_post_vel": {
+      "beta": 0.11141102066564094,
+      "se": 0.03988889503195121,
+      "t": 2.793033514124674,
+      "p": 0.006378505694907277
+    },
+    "mean_post_action": {
+      "beta": 0.005348864594977294,
+      "se": 0.0022011977941169616,
+      "t": 2.4299790819675335,
+      "p": 0.017084671282784125
+    }
+  },
+  "release_dummy": {
+    "original_beta": -0.003475034814505567,
+    "bootstrap_mean": -0.002503128986609361,
+    "bootstrap_median": -0.0030791819296199317,
+    "ci95_lo": -0.004421460450863443,
+    "ci95_hi": 0.002786386403229046,
+    "cluster_bootstrap_p": 0.2096,
+    "n_valid_replicates": 5000
+  },
+  "onset_dummy": {
+    "original_beta": -0.0014753436246128637,
+    "bootstrap_mean": -0.0001054224357983899,
+    "bootstrap_median": -0.0008211264274693373,
+    "ci95_lo": -0.003771040793322329,
+    "ci95_hi": 0.006853425496898884,
+    "cluster_bootstrap_p": 0.7416,
+    "n_valid_replicates": 5000
+  }
+}
