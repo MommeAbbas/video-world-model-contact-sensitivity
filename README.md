@@ -1,5 +1,7 @@
 # Predictive Sensitivity Across Contact Transitions in a Video World Model
 
+**[Paper](https://openreview.net/forum?id=gVEyYKFVac)**: Accepted at NeurIPS 2026 Workshop on Physical Understanding for Decision-Making
+
 This project studies whether an action-conditioned video world model's local
 predictive sensitivity to a small state perturbation changes systematically
 around robot-object contact transitions. We apply a simulator-grounded,
