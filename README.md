@@ -145,13 +145,14 @@ experiments, analyses, and validation checks built on top of it.
 
 ## Citation
 
-A public citation will be added once the paper is available:
 ```bibtex
-@misc{video-world-model-contact-sensitivity,
-  title  = {Predictive Sensitivity Across Contact Transitions in a Video World Model},
-  author = {Anonymous},
-  year   = {2026},
-  note   = {Code: this repository}
+@inproceedings{
+abbas2026predictive,
+title={Predictive Sensitivity Across Contact Transitions in a Video World Model},
+author={Mohammed Abbas},
+booktitle={NeurIPS 2026 Workshop on Physical Understanding for Decision-Making: Bridging Foundation Models and Reliable Agents},
+year={2026},
+url={https://openreview.net/forum?id=gVEyYKFVac}
 }
 ```
 
