@@ -128,6 +128,7 @@
       .result-summary { margin-top: 2rem; }
       .result-copy p:first-child { color: var(--text); }
       .stat { color: var(--text) !important; font-weight: 680; }
+      .estimation-note { color: var(--faint) !important; font-size: .86rem; line-height: 1.5; }
 
       .bibtex {
         margin: 1.35rem 0 0;
@@ -249,8 +250,9 @@
           </figure>
         </div>
         <div class="result-copy result-summary">
-          <p>At the fixed offset of three frames before the event, the release-approach effect independently replicates on the held-out batch and survives restriction to transition-isolated windows.</p>
-          <p class="stat">Covariate-adjusted release-approach minus matched free-motion-control difference in mean downstream token-Hamming divergence: &beta; = +2.53, 95% episode-cluster CI [+1.61, +3.53].</p>
+          <p>Three frames before contact release, the model was more sensitive to a small change in the cube's position than during comparable matched free-motion windows.</p>
+          <p class="stat">Difference in predictive sensitivity: +2.53 differing tokens per predicted frame (95% CI: +1.61 to +3.53).</p>
+          <p class="estimation-note">Estimated from matched release-approach and free-motion windows, adjusted for injection Hamming distance; the interval uses an episode-cluster bootstrap.</p>
           <p>The analogous onset estimate does not independently replicate at that fixed offset. The full sweep explains the contrast: this offset lies on the lower side of onset's rising profile and the higher side of release's falling profile.</p>
         </div>
       </section>
