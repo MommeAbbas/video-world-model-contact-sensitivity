@@ -90,7 +90,7 @@
         letter-spacing: -.04em;
       }
       p { margin: 0 0 1.15rem; }
-      .abstract p, .method-copy p, .result-copy p, .qualitative-copy p { color: var(--muted); }
+      .abstract p, .method-copy, .method-copy p, .result-copy, .result-copy p, .qualitative-copy { color: var(--muted); }
       .abstract p:last-child, .method-copy p:last-child, .result-copy p:last-child, .qualitative-copy p:last-child { margin-bottom: 0; }
       strong { color: var(--text); }
 
@@ -115,9 +115,8 @@
       .intervention-grid figure { margin: 0; }
       .intervention-grid .figure-surface { padding: .55rem; }
       .intervention-grid figcaption { font-size: .83rem; }
-      .method-copy { max-width: 48rem; margin-top: 1.65rem; }
+      .method-copy { margin-top: 1.85rem; }
       .method-note {
-        max-width: 48rem;
         margin-top: 1.3rem !important;
         padding-left: 1rem;
         border-left: 2px solid #888b90;
@@ -125,16 +124,15 @@
         font-size: .97rem;
       }
 
-      .results-figure { margin-top: 1.8rem; }
-      .results-follow-up {
+      .results-figures {
         display: grid;
-        grid-template-columns: minmax(0, .88fr) minmax(16rem, 1.12fr);
-        gap: 2.5rem;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.4rem;
         align-items: start;
-        margin-top: 2.2rem;
+        margin-top: 1.8rem;
       }
-      .results-follow-up figure { margin: 0; }
-      .result-copy { padding-top: .1rem; }
+      .results-figures figure { margin: 0; }
+      .result-summary { margin-top: 2rem; }
       .result-copy p:first-child { color: var(--text); }
       .stat { color: var(--text) !important; font-weight: 680; }
 
@@ -145,7 +143,7 @@
         border: 1px solid var(--line);
         border-radius: 0;
         background: var(--panel-raised);
-        color: #e0e1df;
+        color: #272b30;
         font: .82rem/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
         white-space: pre-wrap;
       }
@@ -168,7 +166,7 @@
         section { margin-bottom: 3.8rem; }
         .intervention-grid { grid-template-columns: 1fr 1fr; }
         .intervention-grid figure:last-child { grid-column: 1 / -1; width: min(100%, 19rem); }
-        .results-follow-up { grid-template-columns: 1fr; gap: 1.7rem; }
+        .results-figures { grid-template-columns: 1fr; gap: 1.7rem; }
       }
       @media (max-width: 430px) {
         h1 { font-size: 2.25rem; }
@@ -246,20 +244,20 @@
       <section id="results">
         <h2>Results</h2>
         <p class="result-copy">The event-centred sweep shows opposing sensitivity profiles around the two contact transitions. The onset profile rises through the event window, whereas the release profile falls through it. Shaded regions show 95% episode-cluster bootstrap intervals.</p>
-        <figure class="results-figure">
-          <div class="figure-surface"><img src="assets/event-profile.png" alt="Event-centred plot of mean downstream divergence, rising around onset and declining around release"></div>
-          <figcaption><strong>Event-centred sensitivity.</strong> Mean downstream token-Hamming divergence following an intervention at each frame offset from contact onset or release.</figcaption>
-        </figure>
-        <div class="results-follow-up">
+        <div class="results-figures">
+          <figure>
+            <div class="figure-surface"><img src="assets/event-profile.png" alt="Event-centred plot of mean downstream divergence, rising around onset and declining around release"></div>
+            <figcaption><strong>Event-centred sensitivity.</strong> Mean downstream token-Hamming divergence following an intervention at each frame offset from contact onset or release.</figcaption>
+          </figure>
           <figure>
             <div class="figure-surface"><img src="assets/event-contrast.png" alt="Within-event contrast plot showing increasing onset and declining release sensitivity across offsets"></div>
             <figcaption><strong>Within-event contrasts.</strong> Holding the event set fixed across offsets yields the same graded pattern.</figcaption>
           </figure>
-          <div class="result-copy">
-            <p>At the fixed offset of three frames before the event, the release-approach effect independently replicates on the held-out batch and survives restriction to transition-isolated windows.</p>
-            <p class="stat">Combined coefficient: beta = +2.53, 95% episode-cluster CI [+1.61, +3.53].</p>
-            <p>The analogous onset estimate does not independently replicate at that fixed offset. The full sweep explains the contrast: this offset lies on the lower side of onset's rising profile and the higher side of release's falling profile.</p>
-          </div>
+        </div>
+        <div class="result-copy result-summary">
+          <p>At the fixed offset of three frames before the event, the release-approach effect independently replicates on the held-out batch and survives restriction to transition-isolated windows.</p>
+          <p class="stat">Combined coefficient: beta = +2.53, 95% episode-cluster CI [+1.61, +3.53].</p>
+          <p>The analogous onset estimate does not independently replicate at that fixed offset. The full sweep explains the contrast: this offset lies on the lower side of onset's rising profile and the higher side of release's falling profile.</p>
         </div>
       </section>
 
