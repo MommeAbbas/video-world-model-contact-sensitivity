@@ -8,15 +8,14 @@
     <title>Predictive Sensitivity Across Contact Transitions in a Video World Model</title>
     <style>
       :root {
-        --bg: #101112;
-        --panel: #151617;
-        --panel-raised: #1a1b1d;
-        --text: #f0f0ed;
-        --muted: #bebfc2;
-        --faint: #828488;
-        --line: #37393d;
-        --link: #ffffff;
-        --max-width: 930px;
+        --bg: #fafaf8;
+        --panel-raised: #f1f2ef;
+        --text: #17191c;
+        --muted: #59616b;
+        --faint: #747b83;
+        --line: #d9dde0;
+        --link: #17191c;
+        --max-width: 980px;
       }
 
       * { box-sizing: border-box; }
@@ -46,11 +45,8 @@
       .page { width: min(calc(100% - 3rem), var(--max-width)); margin: 0 auto; }
 
       .hero {
-        margin: 3rem 0 4.2rem;
-        padding: clamp(2rem, 5vw, 3.5rem);
-        border: 1px solid var(--line);
-        border-radius: 1.35rem;
-        background: var(--panel);
+        margin: 5.3rem 0 4.5rem;
+        padding: 0;
         text-align: center;
       }
       h1 {
@@ -82,7 +78,7 @@
       }
       .primary-links a:hover, .primary-links a:focus-visible { text-decoration: underline; }
       .link-icon { width: 1.1rem; height: 1.1rem; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.85; }
-      .video-frame { overflow: hidden; border-radius: .85rem; background: #090909; }
+      .video-frame { overflow: hidden; background: #090909; }
       .video-frame iframe { display: block; width: 100%; aspect-ratio: 16 / 9; border: 0; }
       .video-label { margin: .9rem 0 0; color: var(--muted); font-size: .95rem; }
 
@@ -102,7 +98,7 @@
       .figure-surface {
         padding: clamp(.65rem, 2vw, 1.25rem);
         border: 1px solid var(--line);
-        border-radius: .55rem;
+        border-radius: 0;
         background: #fff;
       }
       .figure-surface img { width: 100%; }
@@ -147,7 +143,7 @@
         padding: 1.25rem;
         overflow: auto;
         border: 1px solid var(--line);
-        border-radius: .5rem;
+        border-radius: 0;
         background: var(--panel-raised);
         color: #e0e1df;
         font: .82rem/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -165,7 +161,7 @@
       @media (max-width: 700px) {
         body { font-size: 17px; }
         .page { width: min(calc(100% - 1.5rem), var(--max-width)); }
-        .hero { margin-top: 1.25rem; padding: 1.75rem 1.1rem; border-radius: 1rem; }
+        .hero { margin-top: 3rem; padding: 0; }
         .author { font-size: 1.15rem; }
         .venue { font-size: .98rem; }
         .primary-links { gap: 1rem; }
